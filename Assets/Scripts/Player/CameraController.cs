@@ -18,6 +18,8 @@ public class CameraController : MonoBehaviour
     private float rotationX;
     private float rotationY;
 
+    public Quaternion PlanarRotation => Quaternion.Euler(0, rotationY, 0);
+
     private void Start(){
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
