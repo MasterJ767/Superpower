@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,9 +28,12 @@ public class PlayerController : MonoBehaviour {
     private Quaternion targetRotation;
 
     private bool isGrounded;
+    private bool isFalling;
     private bool isRunning;
+    private bool isInteracting;
     private float speedHorizontal = 4.5f;
     private float speedVertical;
+    private float fallDistance = 0.0f;
 
     private void Awake() {
         animator = GetComponent<Animator>();
@@ -49,6 +53,10 @@ public class PlayerController : MonoBehaviour {
         MovePlayer();
     }
 
+    private void LateUpdate() {
+        isInteracting = animator.GetBool("IsInteracting");
+    }
+
     private void GroundCheck() {
         isGrounded = Physics.CheckSphere(transform.TransformPoint(groundCheckOffset), groundCheckDistance, environmentLayer);
     }
@@ -56,14 +64,29 @@ public class PlayerController : MonoBehaviour {
     private void FallCheck() {
         if (isGrounded) {
             speedVertical = -1.0f;
+            if (isFalling) {
+                PlayTargetAnimation("Land", true);
+                isFalling = false;
+
+                // Fall damage calculation here
+                fallDistance = 0.0f;
+            }
         }
         else {
             speedVertical += gravity * Time.deltaTime;
+            if (!isInteracting && fallDistance < 0.01f) {
+                PlayTargetAnimation("Falling", true);
+                isFalling = true;
+
+                RaycastHit hit;
+                Physics.Raycast(transform.TransformPoint(groundCheckOffset), -transform.up, out hit, Int32.MaxValue, environmentLayer);
+                fallDistance = hit.distance;
+            }
         }
     }
 
     private void RunCheck() {            
-        isRunning = isGrounded && Input.GetButton("Run");
+        isRunning = isGrounded && !isRunning && Input.GetButton("Run");
     }
 
     private void MovePlayer() {
@@ -72,17 +95,16 @@ public class PlayerController : MonoBehaviour {
 
         float moveDelta = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
 
-        Vector3 velocity = new Vector3(0, speedVertical, 0);
-        Debug.Log(speedHorizontal);
+        Vector3 velocity = new Vector3(0.0f, speedVertical, 0.0f);
         if (moveDelta > 0.001) {
-            Vector3 moveInput = new Vector3(horizontal, 0, vertical).normalized;
+            Vector3 moveInput = new Vector3(horizontal, 0.0f, vertical).normalized;
             Vector3 moveDirection = cameraController.PlanarRotation * moveInput;
             velocity += CalculateHorizontalVelocity(moveDirection);
             targetRotation = Quaternion.LookRotation(moveDirection);
         }
         else {
             speedHorizontal = 4.5f;
-            animator.SetFloat(animatorMoveSpeed, 0, 0.2f, Time.deltaTime);
+            if (!isInteracting) { animator.SetFloat(animatorMoveSpeed, 0.0f, 0.2f, Time.deltaTime); }
         }
         characterController.Move(velocity * Time.deltaTime);
 
@@ -97,8 +119,13 @@ public class PlayerController : MonoBehaviour {
         speedHorizontal += (acceleration * Time.deltaTime);
         speedHorizontal = Mathf.Max(speedHorizontal, 0.001f);
         float speedRatio = Mathf.Clamp01(speedHorizontal / (runSpeed * 2.0f));
-        animator.SetFloat(animatorMoveSpeed, speedRatio, 0.2f, Time.deltaTime);
+        if (!isInteracting) { animator.SetFloat(animatorMoveSpeed, speedRatio, 0.2f, Time.deltaTime); }
         return moveDirection * speedHorizontal;
+    }
+
+    private void PlayTargetAnimation(string targetAnimation, bool interactingState) {
+        animator.SetBool("isInteracting", interactingState);
+        animator.CrossFade(targetAnimation, 0.2f);
     }
 }
 }
