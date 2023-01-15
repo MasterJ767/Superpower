@@ -3,16 +3,20 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ally
+  - Enemy
+  - Wall
+  - Ground
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Environment
   - Water
   - UI
-  - 
-  - 
+  - Humanoid
+  - Projectile
   - 
   - 
   - 

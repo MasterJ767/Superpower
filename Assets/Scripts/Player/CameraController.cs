@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Player {
-public class CameraController : MonoBehaviour
-{
+public class CameraController : MonoBehaviour {
+    [Header("Settings")]
     public Transform followTarget;
     public float rotationSpeed = 2.0f;
     public float followDistance;
     public Vector2 framingOffset;
     public float minVerticalAngle = -45.0f;
     public float maxVerticalAngle = 45.0f;
-
     public bool invertX;
     public bool invertY;
 
@@ -20,12 +19,12 @@ public class CameraController : MonoBehaviour
 
     public Quaternion PlanarRotation => Quaternion.Euler(0, rotationY, 0);
 
-    private void Start(){
+    private void Start() {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    private void Update(){
+    private void Update() {
         float invertXVal = invertX ? -1 : 1; 
         float invertYVal = invertY ? -1 : 1; 
 
