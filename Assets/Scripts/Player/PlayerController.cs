@@ -8,7 +8,10 @@ public class PlayerController : MonoBehaviour {
     public CameraController cameraController;
 
     [Header("Movement Speed")]
-    public float moveSpeed = 5.0f;
+    public float walkSpeed = 6.0f;
+    public float runSpeed = 12.5f;
+    public float walkAccelerationTime = 0.5f;
+    public float runAccelerationTime = 3.75f;
     public float rotationSpeed = 500.0f;
 
     [Header("Jumping")]
@@ -18,14 +21,19 @@ public class PlayerController : MonoBehaviour {
     public float gravity = -9.81f;
     
     private Animator animator;
+    private int animatorMoveSpeed;
+
     private CharacterController characterController;
     private Quaternion targetRotation;
 
     private bool isGrounded;
-    private float speedY;
+    private bool isRunning;
+    private float speedHorizontal = 4.5f;
+    private float speedVertical;
 
     private void Awake() {
         animator = GetComponent<Animator>();
+        animatorMoveSpeed = Animator.StringToHash("MoveSpeed");
         characterController = GetComponent<CharacterController>();
     }
 
@@ -37,6 +45,7 @@ public class PlayerController : MonoBehaviour {
     private void Update() {
         GroundCheck();
         FallCheck();
+        RunCheck();
         MovePlayer();
     }
 
@@ -46,38 +55,50 @@ public class PlayerController : MonoBehaviour {
 
     private void FallCheck() {
         if (isGrounded) {
-            speedY = -1.0f;
+            speedVertical = -1.0f;
         }
         else {
-            speedY += gravity * Time.deltaTime;
+            speedVertical += gravity * Time.deltaTime;
         }
+    }
+
+    private void RunCheck() {            
+        isRunning = isGrounded && Input.GetButton("Run");
     }
 
     private void MovePlayer() {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        float moveDelta = Mathf.Clamp01(Mathf.Abs(horizontal) + Mathf.Abs(vertical));
+        float moveDelta = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
 
-        Vector3 moveInput = new Vector3(horizontal, 0, vertical).normalized;
-        Vector3 moveDirection = cameraController.PlanarRotation * moveInput;
-
-        Vector3 velocity = CalculateVelocity(moveDirection);
-        velocity.y = speedY;
-
-        characterController.Move(velocity * Time.deltaTime);
-
-        if (moveDelta > 0) {
+        Vector3 velocity = new Vector3(0, speedVertical, 0);
+        Debug.Log(speedHorizontal);
+        if (moveDelta > 0.001) {
+            Vector3 moveInput = new Vector3(horizontal, 0, vertical).normalized;
+            Vector3 moveDirection = cameraController.PlanarRotation * moveInput;
+            velocity += CalculateHorizontalVelocity(moveDirection);
             targetRotation = Quaternion.LookRotation(moveDirection);
         }
+        else {
+            speedHorizontal = 4.5f;
+            animator.SetFloat(animatorMoveSpeed, 0, 0.2f, Time.deltaTime);
+        }
+        characterController.Move(velocity * Time.deltaTime);
 
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-
-        animator.SetFloat("MoveSpeed", moveDelta, 0.2f, Time.deltaTime);
     }
 
-    private Vector3 CalculateVelocity(Vector3 moveDirection) {
-        return moveDirection * moveSpeed;
+    private Vector3 CalculateHorizontalVelocity(Vector3 moveDirection) {
+        float targetSpeed = isRunning ? runSpeed : walkSpeed;
+        float sign = targetSpeed >= speedHorizontal ? 1 : -1;
+        float accelerationTime = isRunning || speedHorizontal > walkSpeed ? runAccelerationTime : walkSpeed;
+        float acceleration = sign * (targetSpeed / accelerationTime);
+        speedHorizontal += (acceleration * Time.deltaTime);
+        speedHorizontal = Mathf.Max(speedHorizontal, 0.001f);
+        float speedRatio = Mathf.Clamp01(speedHorizontal / (runSpeed * 2.0f));
+        animator.SetFloat(animatorMoveSpeed, speedRatio, 0.2f, Time.deltaTime);
+        return moveDirection * speedHorizontal;
     }
 }
 }

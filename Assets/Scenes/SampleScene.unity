@@ -362,7 +362,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraController: {fileID: 963194229}
-  moveSpeed: 5
+  walkSpeed: 6
+  runSpeed: 12.5
+  walkAccelerationTime: 0.5
+  runAccelerationTime: 3.5
   rotationSpeed: 500
   groundCheckDistance: 0.3
   groundCheckOffset: {x: 0, y: 0.175, z: 0.02}
