@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour {
     public float rotationSpeed = 500.0f;
 
     [Header("Jumping")]
+    public float jumpHeight = 3.0f;
     public float groundCheckDistance = 0.3f;
     public Vector3 groundCheckOffset;
     public LayerMask environmentLayer;
@@ -29,10 +30,12 @@ public class PlayerController : MonoBehaviour {
 
     private bool isGrounded;
     private bool isFalling;
+    private bool isJumping;
     private bool isRunning;
     private bool isInteracting;
     private float speedHorizontal = 4.5f;
     private float speedVertical;
+    private Vector3 externalForces;
     private float fallDistance = 0.0f;
 
     private void Awake() {
@@ -51,10 +54,14 @@ public class PlayerController : MonoBehaviour {
         FallCheck();
         RunCheck();
         MovePlayer();
+        ResolveForces();
+        if (fallDistance > 0.001) { Debug.Log(fallDistance); }
     }
 
     private void LateUpdate() {
         isInteracting = animator.GetBool("IsInteracting");
+        isJumping = animator.GetBool("IsJumping");
+        animator.SetBool("IsGrounded", isGrounded);
     }
 
     private void GroundCheck() {
@@ -74,14 +81,17 @@ public class PlayerController : MonoBehaviour {
         }
         else {
             speedVertical += gravity * Time.deltaTime;
-            if (!isInteracting && fallDistance < 0.01f) {
-                PlayTargetAnimation("Falling", true);
-                isFalling = true;
+            isFalling = true;
 
-                RaycastHit hit;
-                Physics.Raycast(transform.TransformPoint(groundCheckOffset), -transform.up, out hit, Int32.MaxValue, environmentLayer);
+            RaycastHit hit;
+            Physics.Raycast(transform.TransformPoint(groundCheckOffset), -transform.up, out hit, Int32.MaxValue, environmentLayer);
+
+            if (!isJumping && !isInteracting && fallDistance < 0.01f) {
+                PlayTargetAnimation("Falling", true);
                 fallDistance = hit.distance;
             }
+
+            if (hit.distance > fallDistance) { fallDistance = hit.distance; }
         }
     }
 
@@ -106,6 +116,14 @@ public class PlayerController : MonoBehaviour {
             speedHorizontal = 4.5f;
             if (!isInteracting) { animator.SetFloat(animatorMoveSpeed, 0.0f, 0.2f, Time.deltaTime); }
         }
+
+        if (isGrounded && Input.GetButton("Jump")) {
+            animator.SetBool("IsJumping", true);
+            PlayTargetAnimation("Jump", false);
+
+            AddForce(Vector3.up, -gravity * jumpHeight);
+        }
+
         characterController.Move(velocity * Time.deltaTime);
 
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
@@ -124,8 +142,17 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void PlayTargetAnimation(string targetAnimation, bool interactingState) {
-        animator.SetBool("isInteracting", interactingState);
+        animator.SetBool("IsInteracting", interactingState);
         animator.CrossFade(targetAnimation, 0.2f);
+    }
+
+    public void AddForce(Vector3 direction, float magnitude) {
+        externalForces += direction.normalized * magnitude;
+    }
+
+    private void ResolveForces() {
+        if (externalForces.magnitude > 0.2f) { characterController.Move(externalForces * Time.deltaTime); }
+        externalForces = Vector3.Lerp(externalForces, Vector3.zero, 5 * Time.deltaTime);
     }
 }
 }

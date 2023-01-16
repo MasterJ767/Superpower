@@ -365,10 +365,11 @@ MonoBehaviour:
   walkSpeed: 6
   runSpeed: 12.5
   walkAccelerationTime: 0.5
-  runAccelerationTime: 3.5
+  runAccelerationTime: 2.5
   rotationSpeed: 500
-  groundCheckDistance: 0.3
-  groundCheckOffset: {x: 0, y: 0.175, z: 0.03}
+  jumpHeight: 0.27
+  groundCheckDistance: 0.2
+  groundCheckOffset: {x: 0, y: 0.125, z: 0.03}
   environmentLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -406,7 +407,7 @@ CharacterController:
   serializedVersion: 2
   m_Height: 1.8
   m_Radius: 0.3
-  m_SlopeLimit: 45
+  m_SlopeLimit: 35
   m_StepOffset: 0.3
   m_SkinWidth: 0.06
   m_MinMoveDistance: 0.001
