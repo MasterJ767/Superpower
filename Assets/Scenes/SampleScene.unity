@@ -2933,7 +2933,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followTarget: {fileID: 838581703}
   rotationSpeed: 2
-  minfollowDistance: 2
+  minfollowDistance: -0.15
   maxfollowDistance: 5
   framingOffset: {x: 0, y: 1.8}
   minVerticalAngle: -20

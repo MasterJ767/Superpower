@@ -38,10 +38,11 @@ public class CameraController : MonoBehaviour {
         float zoomDelta = Input.GetAxis("Mouse ScrollWheel") * invertZoomVal;
         zoom = Mathf.Clamp01(zoom + zoomDelta);
         float followDistance = Mathf.Lerp(maxfollowDistance, minfollowDistance, zoom); 
+        float zoomHeight = Mathf.Lerp(0, 0.1f, zoom);
 
         Quaternion targetRotation = Quaternion.Euler(rotationX, rotationY, 0);
         Vector3 focusPosition = followTarget.position + new Vector3(framingOffset.x, framingOffset.y, 0);
-        transform.position = focusPosition - (targetRotation * new Vector3(0, 0, followDistance));
+        transform.position = focusPosition - (targetRotation * new Vector3(0, zoomHeight, followDistance));
         transform.rotation = targetRotation;   
     }
 }
