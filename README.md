@@ -20,6 +20,6 @@ See [LICENSE.md](LICENSE.md) for more details
 Acknowledgements
 ----------------
 
-[Mixamo](https://www.mixamo.com/) Character and Animations
+[Mixamo](https://www.mixamo.com/) - Character and Animations
  
- [3D Modern Menu UI](https://assetstore.unity.com/packages/tools/gui/3d-modern-menu-ui-116144) UI
+[3D Modern Menu UI](https://assetstore.unity.com/packages/tools/gui/3d-modern-menu-ui-116144) - UI
