@@ -21,6 +21,10 @@ public class PlayerController : MonoBehaviour {
     public Vector3 groundCheckOffset;
     public LayerMask environmentLayer;
     public float gravity = -9.81f;
+
+    [Header("Stamina")]
+    public float costToRunPerSecond = 30.0f;
+    public float costToJump = 80.0f;
     
     private Animator animator;
     private int animatorMoveSpeed;
@@ -28,20 +32,27 @@ public class PlayerController : MonoBehaviour {
     private CharacterController characterController;
     private Quaternion targetRotation;
 
+    private Statistics.Health health;
+    private Statistics.Stamina stamina;
+
     private bool isGrounded;
     private bool isFalling;
     private bool isJumping;
     private bool isRunning;
     private bool isInteracting;
+
     private float speedHorizontal = 4.5f;
     private float speedVertical;
     private Vector3 externalForces;
     private float fallDistance = 0.0f;
+    private float fallInitialY = float.MinValue;
 
     private void Awake() {
         animator = GetComponent<Animator>();
         animatorMoveSpeed = Animator.StringToHash("MoveSpeed");
         characterController = GetComponent<CharacterController>();
+        health = GetComponent<Statistics.Health>();
+        stamina = GetComponent<Statistics.Stamina>();
     }
 
     private void OnDrawGizmosSelected() {
@@ -53,9 +64,9 @@ public class PlayerController : MonoBehaviour {
         GroundCheck();
         FallCheck();
         RunCheck();
+        JumpCheck();
         MovePlayer();
         ResolveForces();
-        if (fallDistance > 0.001) { Debug.Log(fallDistance); }
     }
 
     private void LateUpdate() {
@@ -74,9 +85,9 @@ public class PlayerController : MonoBehaviour {
             if (isFalling) {
                 PlayTargetAnimation("Land", true);
                 isFalling = false;
-
-                // Fall damage calculation here
+                health.Damage(CalculateFallDamage());
                 fallDistance = 0.0f;
+                fallInitialY = float.MinValue;
             }
         }
         else {
@@ -89,14 +100,32 @@ public class PlayerController : MonoBehaviour {
             if (!isJumping && !isInteracting && fallDistance < 0.01f) {
                 PlayTargetAnimation("Falling", true);
                 fallDistance = hit.distance;
+                if (fallInitialY <= float.MinValue + float.Epsilon) { fallInitialY = transform.position.y; }
             }
 
             if (hit.distance > fallDistance) { fallDistance = hit.distance; }
         }
     }
 
+    private float CalculateFallDamage() {
+        float threshold = jumpHeight * 2.25f;
+        return fallDistance <= threshold || fallInitialY - transform.position.y <= threshold ? 0.0f : (fallDistance - threshold) * 8.25f;
+    }
+
     private void RunCheck() {            
-        isRunning = isGrounded && !isRunning && Input.GetButton("Run");
+        isRunning = isGrounded && Input.GetButton("Run") && stamina.ExpendQuery(costToRunPerSecond * Time.deltaTime) > 0;
+        if (isRunning) { stamina.Expend(costToRunPerSecond * Time.deltaTime); }
+    }
+
+    private void JumpCheck() {
+        if (isGrounded && Input.GetButtonDown("Jump") && stamina.ExpendQuery(costToJump) > 0) {
+            animator.SetBool("IsJumping", true);
+            PlayTargetAnimation("Jump", false);
+
+            stamina.Expend(costToJump);
+            AddForce(Vector3.up, -gravity * jumpHeight);
+            fallInitialY = transform.position.y;
+        }
     }
 
     private void MovePlayer() {
@@ -116,14 +145,6 @@ public class PlayerController : MonoBehaviour {
             speedHorizontal = 4.5f;
             if (!isInteracting) { animator.SetFloat(animatorMoveSpeed, 0.0f, 0.2f, Time.deltaTime); }
         }
-
-        if (isGrounded && Input.GetButton("Jump")) {
-            animator.SetBool("IsJumping", true);
-            PlayTargetAnimation("Jump", false);
-
-            AddForce(Vector3.up, -gravity * jumpHeight);
-        }
-
         characterController.Move(velocity * Time.deltaTime);
 
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
