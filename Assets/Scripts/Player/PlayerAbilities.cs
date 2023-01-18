@@ -4,6 +4,14 @@ using UnityEngine;
 
 namespace Player {
 public class PlayerAbilities : MonoBehaviour {
+    [Header("UI")]
+    public GameObject classBorder;
+    public GameObject ability1Border;
+    public GameObject ability2Border;
+    public GameObject ability3Border;
+    public GameObject ability4Border;
+    public GameObject ability5Border;
+
     private AttackMode mode = AttackMode.Basic;
     private PlayerMovement playerMovement;
     private Statistics.Information playerInfo;
@@ -39,9 +47,7 @@ public class PlayerAbilities : MonoBehaviour {
     private void UpdateCooldowns() {
         if (!basicAttack.canUse) {
             basicAttack.cooldownTimer -= Time.deltaTime;
-            Debug.Log(basicAttack.cooldownTimer);
             basicAttack.canUse = basicAttack.cooldownTimer <= 0;
-            Debug.Log(basicAttack.canUse);
         }
 
         if (!attack1.canUse) {
@@ -71,12 +77,55 @@ public class PlayerAbilities : MonoBehaviour {
     }
 
     private void ModeCheck() {
+        AttackMode lastMode = mode;
         if (Input.GetButtonDown("Basic")) { mode = AttackMode.Basic; }
-        else if (Input.GetButtonDown("Ability1")) { mode = AttackMode.Attack1; }
-        else if (Input.GetButtonDown("Ability2")) { mode = AttackMode.Attack2; }
-        else if (Input.GetButtonDown("Ability3")) { mode = AttackMode.Attack3; }
-        else if (Input.GetButtonDown("Ability4")) { mode = AttackMode.Attack4; }
-        else if (Input.GetButtonDown("Ability5")) { mode = AttackMode.Attack5; }
+        else if (Input.GetButtonDown("Ability1")) { mode = mode == AttackMode.Attack1 ? AttackMode.Basic : AttackMode.Attack1; }
+        else if (Input.GetButtonDown("Ability2")) { mode = mode == AttackMode.Attack2 ? AttackMode.Basic : AttackMode.Attack2; }
+        else if (Input.GetButtonDown("Ability3")) { mode = mode == AttackMode.Attack3 ? AttackMode.Basic : AttackMode.Attack3; }
+        else if (Input.GetButtonDown("Ability4")) { mode = mode == AttackMode.Attack4 ? AttackMode.Basic : AttackMode.Attack4; }
+        else if (Input.GetButtonDown("Ability5")) { mode = mode == AttackMode.Attack5 ? AttackMode.Basic : AttackMode.Attack5; }
+        if (lastMode != mode) {
+            switch (lastMode) {
+                case AttackMode.Basic: 
+                    classBorder.SetActive(false);
+                    break;
+                case AttackMode.Attack1: 
+                    ability1Border.SetActive(false);
+                    break;
+                case AttackMode.Attack2: 
+                    ability2Border.SetActive(false);
+                    break;
+                case AttackMode.Attack3: 
+                    ability3Border.SetActive(false);
+                    break;
+                case AttackMode.Attack4: 
+                    ability4Border.SetActive(false);
+                    break;
+                case AttackMode.Attack5: 
+                    ability5Border.SetActive(false);
+                    break;
+            }
+            switch (mode) {
+                case AttackMode.Basic: 
+                    classBorder.SetActive(true);
+                    break;
+                case AttackMode.Attack1: 
+                    ability1Border.SetActive(true);
+                    break;
+                case AttackMode.Attack2: 
+                    ability2Border.SetActive(true);
+                    break;
+                case AttackMode.Attack3: 
+                    ability3Border.SetActive(true);
+                    break;
+                case AttackMode.Attack4: 
+                    ability4Border.SetActive(true);
+                    break;
+                case AttackMode.Attack5: 
+                    ability5Border.SetActive(true);
+                    break;
+            }
+        }
     }
 
     private void AbilityCheck() {
