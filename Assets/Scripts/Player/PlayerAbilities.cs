@@ -39,7 +39,9 @@ public class PlayerAbilities : MonoBehaviour {
     private void UpdateCooldowns() {
         if (!basicAttack.canUse) {
             basicAttack.cooldownTimer -= Time.deltaTime;
+            Debug.Log(basicAttack.cooldownTimer);
             basicAttack.canUse = basicAttack.cooldownTimer <= 0;
+            Debug.Log(basicAttack.canUse);
         }
 
         if (!attack1.canUse) {
@@ -82,7 +84,9 @@ public class PlayerAbilities : MonoBehaviour {
         switch (mode) {
             case AttackMode.Basic:
                 ability = playerInfo.baseAttack;
-                if (Input.GetMouseButtonDown(0) && basicAttack.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                if (Input.GetMouseButton(0) && basicAttack.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    basicAttack.canUse = false;
+                    basicAttack.cooldownTimer = ability.cooldown;
                     energy.Expend(ability.energyCost);
                     stamina.Expend(ability.staminaCost);
                     playerMovement.PlayAttackAnimation("BasicAttack");
@@ -91,7 +95,9 @@ public class PlayerAbilities : MonoBehaviour {
                 break;
             case AttackMode.Attack1:
                 ability = playerInfo.attack1;
-                if (Input.GetMouseButtonDown(0) && attack1.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                if (Input.GetMouseButton(0) && attack1.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    attack1.canUse = false;
+                    attack1.cooldownTimer = ability.cooldown;
                     energy.Expend(ability.energyCost);
                     stamina.Expend(ability.staminaCost);
                     //Handle attack
@@ -99,7 +105,9 @@ public class PlayerAbilities : MonoBehaviour {
                 break;
             case AttackMode.Attack2:
                 ability = playerInfo.attack2;
-                if (Input.GetMouseButtonDown(0) && attack2.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                if (Input.GetMouseButton(0) && attack2.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    attack2.canUse = false;
+                    attack2.cooldownTimer = ability.cooldown;
                     energy.Expend(ability.energyCost);
                     stamina.Expend(ability.staminaCost);
                     //Handle attack
@@ -107,7 +115,9 @@ public class PlayerAbilities : MonoBehaviour {
                 break;
             case AttackMode.Attack3:
                 ability = playerInfo.attack3;
-                if (Input.GetMouseButtonDown(0) && attack3.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                if (Input.GetMouseButton(0) && attack3.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    attack3.canUse = false;
+                    attack3.cooldownTimer = ability.cooldown;
                     energy.Expend(ability.energyCost);
                     stamina.Expend(ability.staminaCost);
                     //Handle attack
@@ -115,7 +125,9 @@ public class PlayerAbilities : MonoBehaviour {
                 break;
             case AttackMode.Attack4:
                 ability = playerInfo.attack4;
-                if (Input.GetMouseButtonDown(0) && attack4.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                if (Input.GetMouseButton(0) && attack4.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    attack4.canUse = false;
+                    attack4.cooldownTimer = ability.cooldown;
                     energy.Expend(ability.energyCost);
                     stamina.Expend(ability.staminaCost);
                     //Handle attack
@@ -123,7 +135,9 @@ public class PlayerAbilities : MonoBehaviour {
                 break;
             case AttackMode.Attack5:
                 ability = playerInfo.attack5;
-                if (Input.GetMouseButtonDown(0) && attack5.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                if (Input.GetMouseButton(0) && attack5.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    attack5.canUse = false;
+                    attack5.cooldownTimer = ability.cooldown;
                     energy.Expend(ability.energyCost);
                     stamina.Expend(ability.staminaCost);
                     //Handle attack

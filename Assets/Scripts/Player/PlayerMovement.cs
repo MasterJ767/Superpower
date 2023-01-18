@@ -115,12 +115,12 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void RunCheck() {            
-        isRunning = isGrounded && !isAttacking && Input.GetButton("Run") && stamina.ExpendQuery(costToRunPerSecond * Time.deltaTime) > 0;
+        isRunning = isGrounded && Input.GetButton("Run") && stamina.ExpendQuery(costToRunPerSecond * Time.deltaTime) > 0;
         if (isRunning) { stamina.Expend(costToRunPerSecond * Time.deltaTime); }
     }
 
     private void JumpCheck() {
-        if (isGrounded && !isAttacking && Input.GetButtonDown("Jump") && stamina.ExpendQuery(costToJump) > 0) {
+        if (isGrounded && Input.GetButtonDown("Jump") && stamina.ExpendQuery(costToJump) > 0) {
             animator.SetBool("IsJumping", true);
             PlayTargetAnimation("Jump", false);
 

@@ -18,4 +18,4 @@ MonoBehaviour:
   staminaCost: 0
   damage: 8
   range: 12
-  cooldown: 0.8
+  cooldown: 2.4

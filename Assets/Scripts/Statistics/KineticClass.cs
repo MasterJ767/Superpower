@@ -7,6 +7,8 @@ namespace Statistics {
 public class KineticClass : ScriptableObject {
     [Header("Attributes")]
     public KineticType kineticType;
+    public Color primary;
+    public Color secondary;
     public Abilities.Ability[] abilities;
 }
 }
