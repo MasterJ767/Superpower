@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Player {
-public class PlayerController : MonoBehaviour {
+public class PlayerMovement : MonoBehaviour {
     [Header("Camera")]
     public CameraController cameraController;
 
@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private float CalculateFallDamage() {
-        float threshold = jumpHeight * 2.25f;
+        float threshold = jumpHeight * 1.75f;
         return fallDistance <= threshold || fallInitialY - transform.position.y <= threshold ? 0.0f : (fallDistance - threshold) * 8.25f;
     }
 
