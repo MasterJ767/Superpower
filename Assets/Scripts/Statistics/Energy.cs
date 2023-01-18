@@ -57,9 +57,11 @@ public class Energy : MonoBehaviour {
     
     public void Expend(float value)
     {
-        timeSinceUse = 0;
-        currentEnergy = Mathf.Max(0, currentEnergy - value);
-        SetEnergySlider();
+        if (Mathf.Abs(value) > 0) { 
+            timeSinceUse = 0; 
+            currentEnergy = Mathf.Max(0, currentEnergy - value);
+            SetEnergySlider();
+        }
     }
     
     public float ExpendQuery(float value)

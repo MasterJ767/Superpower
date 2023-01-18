@@ -58,12 +58,14 @@ public class Health : MonoBehaviour {
 
     public void Damage(float value)
     {
-        timeSinceHit = 0;
-        currentHealth = Mathf.Max(0, currentHealth - value);
-        SetHealthSlider();
-        if (currentHealth <= 0 && !isDead)
-        {
-            Death();
+        if (Mathf.Abs(value) > 0) {
+            timeSinceHit = 0;
+            currentHealth = Mathf.Max(0, currentHealth - value);
+            SetHealthSlider();
+            if (currentHealth <= 0 && !isDead)
+            {
+                Death();
+            }
         }
     }
 

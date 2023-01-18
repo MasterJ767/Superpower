@@ -57,9 +57,11 @@ public class Stamina : MonoBehaviour {
     
     public void Expend(float value)
     {
-        timeSinceUse = 0;
-        currentStamina = Mathf.Max(0, currentStamina - value);
-        SetStaminaSlider();
+        if (Mathf.Abs(value) > 0) {
+            timeSinceUse = 0;
+            currentStamina = Mathf.Max(0, currentStamina - value);
+            SetStaminaSlider();
+        }
     }
     
     public float ExpendQuery(float value)

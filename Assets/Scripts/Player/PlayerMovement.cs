@@ -39,6 +39,7 @@ public class PlayerMovement : MonoBehaviour {
     private bool isFalling;
     private bool isJumping;
     private bool isRunning;
+    private bool isAttacking;
     private bool isInteracting;
 
     private float speedHorizontal = 4.5f;
@@ -72,6 +73,7 @@ public class PlayerMovement : MonoBehaviour {
     private void LateUpdate() {
         isInteracting = animator.GetBool("IsInteracting");
         isJumping = animator.GetBool("IsJumping");
+        isAttacking = animator.GetBool("IsAttacking");
         animator.SetBool("IsGrounded", isGrounded);
     }
 
@@ -113,12 +115,12 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void RunCheck() {            
-        isRunning = isGrounded && Input.GetButton("Run") && stamina.ExpendQuery(costToRunPerSecond * Time.deltaTime) > 0;
+        isRunning = isGrounded && !isAttacking && Input.GetButton("Run") && stamina.ExpendQuery(costToRunPerSecond * Time.deltaTime) > 0;
         if (isRunning) { stamina.Expend(costToRunPerSecond * Time.deltaTime); }
     }
 
     private void JumpCheck() {
-        if (isGrounded && Input.GetButtonDown("Jump") && stamina.ExpendQuery(costToJump) > 0) {
+        if (isGrounded && !isAttacking && Input.GetButtonDown("Jump") && stamina.ExpendQuery(costToJump) > 0) {
             animator.SetBool("IsJumping", true);
             PlayTargetAnimation("Jump", false);
 
@@ -165,6 +167,13 @@ public class PlayerMovement : MonoBehaviour {
     private void PlayTargetAnimation(string targetAnimation, bool interactingState) {
         animator.SetBool("IsInteracting", interactingState);
         animator.CrossFade(targetAnimation, 0.2f);
+    }
+
+    public void PlayAttackAnimation(string targetAnimation) {
+        isAttacking = true;
+        animator.SetBool("IsAttacking", true);
+        PlayTargetAnimation(targetAnimation + "Up", true);
+        PlayTargetAnimation(targetAnimation + "Low", true);
     }
 
     public void AddForce(Vector3 direction, float magnitude) {

@@ -2283,6 +2283,7 @@ GameObject:
   - component: {fileID: 838581706}
   - component: {fileID: 838581704}
   - component: {fileID: 838581710}
+  - component: {fileID: 838581711}
   - component: {fileID: 838581707}
   - component: {fileID: 838581709}
   - component: {fileID: 838581708}
@@ -2537,11 +2538,23 @@ MonoBehaviour:
   entityClass: 10
   level: 1
   baseAttack: {fileID: 11400000, guid: 564aaa8b8c04f1445b76f4b9c16990e5, type: 2}
-  Attack1: {fileID: 0}
-  Attack2: {fileID: 0}
-  Attack3: {fileID: 0}
-  Attack4: {fileID: 0}
-  Attack5: {fileID: 0}
+  attack1: {fileID: 0}
+  attack2: {fileID: 0}
+  attack3: {fileID: 0}
+  attack4: {fileID: 0}
+  attack5: {fileID: 0}
+--- !u!114 &838581711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838581701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1d1d0845fc2102429d1370edb271b4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &841281437
 GameObject:
   m_ObjectHideFlags: 0

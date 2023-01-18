@@ -32,6 +32,7 @@ public class PlayerAbilities : MonoBehaviour {
 
     private void Update() {
         UpdateCooldowns();
+        ModeCheck();
         AbilityCheck();
     }
 
@@ -67,6 +68,15 @@ public class PlayerAbilities : MonoBehaviour {
         }
     }
 
+    private void ModeCheck() {
+        if (Input.GetButtonDown("Basic")) { mode = AttackMode.Basic; }
+        else if (Input.GetButtonDown("Ability1")) { mode = AttackMode.Attack1; }
+        else if (Input.GetButtonDown("Ability2")) { mode = AttackMode.Attack2; }
+        else if (Input.GetButtonDown("Ability3")) { mode = AttackMode.Attack3; }
+        else if (Input.GetButtonDown("Ability4")) { mode = AttackMode.Attack4; }
+        else if (Input.GetButtonDown("Ability5")) { mode = AttackMode.Attack5; }
+    }
+
     private void AbilityCheck() {
         Abilities.Ability ability;
         switch (mode) {
@@ -75,7 +85,48 @@ public class PlayerAbilities : MonoBehaviour {
                 if (Input.GetMouseButtonDown(0) && basicAttack.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
                     energy.Expend(ability.energyCost);
                     stamina.Expend(ability.staminaCost);
+                    playerMovement.PlayAttackAnimation("BasicAttack");
                     //Handle basic attack
+                }
+                break;
+            case AttackMode.Attack1:
+                ability = playerInfo.attack1;
+                if (Input.GetMouseButtonDown(0) && attack1.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    energy.Expend(ability.energyCost);
+                    stamina.Expend(ability.staminaCost);
+                    //Handle attack
+                }
+                break;
+            case AttackMode.Attack2:
+                ability = playerInfo.attack2;
+                if (Input.GetMouseButtonDown(0) && attack2.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    energy.Expend(ability.energyCost);
+                    stamina.Expend(ability.staminaCost);
+                    //Handle attack
+                }
+                break;
+            case AttackMode.Attack3:
+                ability = playerInfo.attack3;
+                if (Input.GetMouseButtonDown(0) && attack3.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    energy.Expend(ability.energyCost);
+                    stamina.Expend(ability.staminaCost);
+                    //Handle attack
+                }
+                break;
+            case AttackMode.Attack4:
+                ability = playerInfo.attack4;
+                if (Input.GetMouseButtonDown(0) && attack4.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    energy.Expend(ability.energyCost);
+                    stamina.Expend(ability.staminaCost);
+                    //Handle attack
+                }
+                break;
+            case AttackMode.Attack5:
+                ability = playerInfo.attack5;
+                if (Input.GetMouseButtonDown(0) && attack5.canUse && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    energy.Expend(ability.energyCost);
+                    stamina.Expend(ability.staminaCost);
+                    //Handle attack
                 }
                 break;
         }
