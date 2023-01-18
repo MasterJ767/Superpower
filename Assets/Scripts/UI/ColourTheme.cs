@@ -115,8 +115,6 @@ public class ColourTheme : MonoBehaviour {
         ability3Border.color = primary;
         ability4Border.color = primary;
         ability5Border.color = primary;
-
-
     }
 }
 }
