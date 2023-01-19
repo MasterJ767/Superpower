@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour {
     private int animatorMoveSpeed;
 
     private CharacterController characterController;
-    private Quaternion targetRotation;
+    [HideInInspector] public Quaternion targetRotation;
 
     private Statistics.Health health;
     private Statistics.Stamina stamina;
@@ -110,7 +110,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private float CalculateFallDamage() {
-        float threshold = jumpHeight * 1.75f;
+        float threshold = jumpHeight * 1.5f;
         return fallDistance <= threshold || fallInitialY - transform.position.y <= threshold ? 0.0f : (fallDistance - threshold) * 8.25f;
     }
 
@@ -136,10 +136,10 @@ public class PlayerMovement : MonoBehaviour {
 
         float moveDelta = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
 
-        Vector3 velocity = new Vector3(0.0f, speedVertical, 0.0f);
+        Vector3 velocity = new Vector3(0.0f, speedVertical, 0.0f); 
         if (moveDelta > 0.001) {
             Vector3 moveInput = new Vector3(horizontal, 0.0f, vertical).normalized;
-            Vector3 moveDirection = cameraController.PlanarRotation * moveInput;
+            Vector3 moveDirection = Quaternion.Euler(0, cameraController.rotationY, 0) * moveInput;
             velocity += CalculateHorizontalVelocity(moveDirection);
             targetRotation = Quaternion.LookRotation(moveDirection);
         }

@@ -12,6 +12,9 @@ public class PlayerAbilities : MonoBehaviour {
     public GameObject ability4Border;
     public GameObject ability5Border;
 
+    [Header("Positioning")]
+    public Vector3 basicAttackOffset;
+
     private AttackMode mode = AttackMode.Basic;
     private PlayerMovement playerMovement;
     private Statistics.Information playerInfo;
@@ -139,7 +142,7 @@ public class PlayerAbilities : MonoBehaviour {
                     energy.Expend(ability.energyCost);
                     stamina.Expend(ability.staminaCost);
                     playerMovement.PlayAttackAnimation("BasicAttack");
-                    //Handle basic attack
+                    Abilities.GenericAbilities.ExecuteBasicAttack(transform, basicAttackOffset, playerInfo.baseAttack, basicAttack);
                 }
                 break;
             case AttackMode.Attack1:

@@ -12,5 +12,7 @@ public class Ability : ScriptableObject {
     public float damage;
     public float range;
     public float cooldown;
+    public float speed;
+    public GameObject prefab;
 }
 }

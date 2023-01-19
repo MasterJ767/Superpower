@@ -19,3 +19,5 @@ MonoBehaviour:
   damage: 8
   range: 12
   cooldown: 2.4
+  speed: 9.5
+  prefab: {fileID: 6397738746419445079, guid: 897943256cafb854c8c8fdd1050a2f54, type: 3}

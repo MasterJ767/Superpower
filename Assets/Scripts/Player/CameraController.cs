@@ -16,11 +16,9 @@ public class CameraController : MonoBehaviour {
     public bool invertY;
     public bool invertZoom;
 
-    private float rotationX;
-    private float rotationY;
+    [HideInInspector] public float rotationX;
+    [HideInInspector] public float rotationY;
     private float zoom = 0f;
-
-    public Quaternion PlanarRotation => Quaternion.Euler(0, rotationY, 0);
 
     private void Start() {
         Cursor.visible = false;
