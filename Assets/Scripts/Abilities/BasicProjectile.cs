@@ -33,6 +33,11 @@ public class BasicProjectile : MonoBehaviour {
             Gizmos.DrawWireSphere(transform.position, 0.5f * maxScale);
         }
 
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(user.position, user.position + user.forward * 3);
+        Transform camera = user.GetComponent<Player.PlayerMovement>().cameraController.transform;
+        Gizmos.DrawLine(camera.position, camera.position + camera.forward * 3);
+
         if (isInflated) {
             Gizmos.color = Color.magenta;
             Gizmos.DrawLine(startPosition, targetPosition);
@@ -62,7 +67,14 @@ public class BasicProjectile : MonoBehaviour {
         }
         if (scale + float.Epsilon >= maxScale && scale - float.Epsilon <= maxScale) { 
             isInflated = true; 
-            transform.rotation = user.CompareTag("Player") ? Quaternion.LookRotation(Vector3.Lerp(user.forward, user.GetComponent<Player.PlayerMovement>().cameraController.transform.forward, 1.0f / 3.0f)) : Quaternion.identity;
+            if (user.CompareTag("Player")) {
+                Transform camera = user.GetComponent<Player.PlayerMovement>().cameraController.transform;
+                Vector3 lookDirection = new Vector3(user.forward.x, Mathf.Lerp(user.forward.y, camera.forward.y, 1.0f / 3.0f), user.forward.z);
+                transform.rotation = Quaternion.LookRotation(lookDirection);
+            }
+            else {
+                transform.rotation = Quaternion.identity;
+            }
             startPosition = transform.position;
             targetPosition = startPosition + (transform.forward * range);        
         }
