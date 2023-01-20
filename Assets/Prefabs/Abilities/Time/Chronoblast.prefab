@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 739125194625243179}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3278084270228903695}
@@ -4840,7 +4840,7 @@ Transform:
   m_GameObject: {fileID: 3203966736926590307}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3278084270228903695}
@@ -9720,6 +9720,7 @@ GameObject:
   - component: {fileID: 3278084270228903695}
   - component: {fileID: 3180047658463714493}
   - component: {fileID: 7742236041622999445}
+  - component: {fileID: 4111579856631724059}
   m_Layer: 7
   m_Name: Chronoblast
   m_TagString: Untagged
@@ -9736,7 +9737,7 @@ Transform:
   m_GameObject: {fileID: 6397738746419445079}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7806638912932666580}
@@ -9775,3 +9776,18 @@ MonoBehaviour:
   particleSystems:
   - {fileID: 3203966736926590307}
   - {fileID: 739125194625243179}
+  isInitialised: 0
+  isInflated: 0
+  isRewinding: 0
+--- !u!114 &4111579856631724059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6397738746419445079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a982f72136a5c644ae09abd58f6e5e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

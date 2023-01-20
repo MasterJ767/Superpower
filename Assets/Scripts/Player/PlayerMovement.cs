@@ -35,18 +35,19 @@ public class PlayerMovement : MonoBehaviour {
     private Statistics.Health health;
     private Statistics.Stamina stamina;
 
-    private bool isGrounded;
-    private bool isFalling;
+    [HideInInspector] public bool isGrounded;
+    [HideInInspector] public bool isFalling;
     private bool isJumping;
     private bool isRunning;
     private bool isAttacking;
     private bool isInteracting;
+    [HideInInspector] public bool isRewinding;
 
-    private float speedHorizontal = 4.5f;
-    private float speedVertical;
-    private Vector3 externalForces;
-    private float fallDistance = 0.0f;
-    private float fallInitialY = float.MinValue;
+    [HideInInspector] public float speedHorizontal = 4.5f;
+    [HideInInspector] public float speedVertical;
+    [HideInInspector] public Vector3 externalForces;
+    [HideInInspector] public float fallDistance = 0.0f;
+    [HideInInspector] public float fallInitialY = float.MinValue;
 
     private void Awake() {
         animator = GetComponent<Animator>();
@@ -62,12 +63,14 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void Update() {
-        GroundCheck();
-        FallCheck();
-        RunCheck();
-        JumpCheck();
-        MovePlayer();
-        ResolveForces();
+        if (!isRewinding) {
+            GroundCheck();
+            FallCheck();
+            RunCheck();
+            JumpCheck();
+            MovePlayer();
+            ResolveForces();
+        }
     }
 
     private void LateUpdate() {
@@ -177,7 +180,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     public void AddForce(Vector3 direction, float magnitude) {
-        externalForces += direction.normalized * magnitude;
+        if (!isRewinding) { externalForces += direction.normalized * magnitude; }
     }
 
     private void ResolveForces() {

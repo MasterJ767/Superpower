@@ -19,24 +19,24 @@ public class Energy : MonoBehaviour {
     public TextMeshProUGUI energyText;
     public Gradient energyColour;
     
-    private float timeSinceUse;
+    [HideInInspector] public float timeSinceUse;
+    [HideInInspector] public bool isRewinding;
     
-    private void Start()
-    {
+    private void Start() {
         SetEnergyMax();
     }
     
-    private void Update()
-    {
-        timeSinceUse += Time.deltaTime;
-        if (currentEnergy < maxEnergy && timeSinceUse > regenDelay)
-        {
-            Recover(regenPerSecond * Time.deltaTime);
+    private void Update() {
+        if (!isRewinding) {
+            timeSinceUse += Time.deltaTime;
+            if (currentEnergy < maxEnergy && timeSinceUse > regenDelay)
+            {
+                Recover(regenPerSecond * Time.deltaTime);
+            }
         }
     }
     
-    private void SetEnergyMax()
-    {
+    private void SetEnergyMax() {
         if (hasEnergyBar)
         {
             slider.maxValue = maxEnergy;
@@ -45,8 +45,7 @@ public class Energy : MonoBehaviour {
         SetEnergySlider();
     }
 
-    private void SetEnergySlider()
-    {
+    public void SetEnergySlider() {
         if (hasEnergyBar)
         {
             slider.value = currentEnergy;
@@ -55,24 +54,23 @@ public class Energy : MonoBehaviour {
         }
     }
     
-    public void Expend(float value)
-    {
-        if (Mathf.Abs(value) > 0) { 
+    public void Expend(float value) {
+        if (Mathf.Abs(value) > 0 && !isRewinding) { 
             timeSinceUse = 0; 
             currentEnergy = Mathf.Max(0, currentEnergy - value);
             SetEnergySlider();
         }
     }
     
-    public float ExpendQuery(float value)
-    {
+    public float ExpendQuery(float value) {
         return Mathf.Max(0, currentEnergy - value);
     }
     
-    public void Recover(float value)
-    {
-        currentEnergy = Mathf.Min(maxEnergy, currentEnergy + value);
-        SetEnergySlider();
+    public void Recover(float value) {
+        if (Mathf.Abs(value) > 0 && !isRewinding) {
+            currentEnergy = Mathf.Min(maxEnergy, currentEnergy + value);
+            SetEnergySlider();
+        }
     }
 }
 }

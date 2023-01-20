@@ -8,6 +8,8 @@ public struct PlayerState {
     public Quaternion rotation;
     public Vector3 cameraPosition;
     public Quaternion cameraRotation;
+    public bool isGrounded;
+    public bool isFalling;
     public float speedHorizontal;
     public float speedVertical;
     public Vector3 externalForces;
@@ -23,8 +25,8 @@ public struct PlayerState {
     public float currentHealth;
     public float timeSinceHit;
     public float currentStamina;
-    public float timeSinceStaminaExpend;
+    public float timeSinceStaminaUse;
     public float currentEnergy;
-    public float timeSinceEnergyExpend;
+    public float timeSinceEnergyUse;
 }
 }

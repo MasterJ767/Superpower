@@ -20,24 +20,25 @@ public class Health : MonoBehaviour {
     public TextMeshProUGUI healthText;
     public Gradient healthColour;
 
-    [NonSerialized] public bool isDead;
-    private float timeSinceHit;
+    [HideInInspector] public bool isDead;
+    [HideInInspector] public float timeSinceHit;
+    [HideInInspector] public bool isRewinding;
 
     private void Start() {
         SetHealthMax();
     }
 
-     private void Update()
-    {
-        timeSinceHit += Time.deltaTime;
-        if (currentHealth < maxHealth && timeSinceHit > regenDelay)
-        {
-            Heal(regenPerSecond * Time.deltaTime);
+     private void Update() {
+        if (!isRewinding) {
+            timeSinceHit += Time.deltaTime;
+            if (currentHealth < maxHealth && timeSinceHit > regenDelay)
+            {
+                Heal(regenPerSecond * Time.deltaTime);
+            }
         }
     }
 
-    private void SetHealthMax()
-    {
+    private void SetHealthMax() {
         if (hasHealthBar)
         {
             slider.maxValue = maxHealth;
@@ -46,8 +47,7 @@ public class Health : MonoBehaviour {
         SetHealthSlider();
     }
 
-    private void SetHealthSlider()
-    {
+    public void SetHealthSlider() {
         if (hasHealthBar)
         {
             slider.value = currentHealth;
@@ -56,9 +56,8 @@ public class Health : MonoBehaviour {
         }
     }
 
-    public void Damage(float value)
-    {
-        if (Mathf.Abs(value) > 0) {
+    public void Damage(float value) {
+        if (Mathf.Abs(value) > 0 && !isRewinding) {
             timeSinceHit = 0;
             currentHealth = Mathf.Max(0, currentHealth - value);
             SetHealthSlider();
@@ -69,19 +68,18 @@ public class Health : MonoBehaviour {
         }
     }
 
-    public float DamageQuery(float value)
-    {
+    public float DamageQuery(float value) {
         return Mathf.Max(0, currentHealth - value);
     }
 
-    public void Heal(float value)
-    {
-        currentHealth = Mathf.Min(maxHealth, currentHealth + value);
-        SetHealthSlider();
+    public void Heal(float value) {
+        if (Mathf.Abs(value) > 0 && !isRewinding) {
+            currentHealth = Mathf.Min(maxHealth, currentHealth + value);
+            SetHealthSlider();
+        }
     }
 
-    private void Death()
-    {
+    private void Death() {
         isDead = true;
         
         // Run on death things here

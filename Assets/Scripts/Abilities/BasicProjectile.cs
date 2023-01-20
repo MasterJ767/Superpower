@@ -15,15 +15,16 @@ public class BasicProjectile : MonoBehaviour {
     private float range;
     private Vector3 startPosition;
     private Vector3 targetPosition;
-    private bool isInitialised;
-    private bool isInflated;
+    [HideInInspector] public bool isInitialised;
+    [HideInInspector] public bool isInflated;
+    [HideInInspector] public bool isRewinding;
 
     private void Update() {
-        if (isInitialised && !isInflated) { 
+        if (!isRewinding && isInitialised && !isInflated) { 
             PositionCheck();
             InflateCheck(); 
         }
-        if (isInflated) { MoveProjectile(); }
+        if (!isRewinding && isInflated) { MoveProjectile(); }
         if (isInflated && Vector3.Distance(transform.position, targetPosition) <= float.Epsilon) { Decay(); }
     }
 
@@ -32,11 +33,6 @@ public class BasicProjectile : MonoBehaviour {
             Gizmos.color = Color.magenta;
             Gizmos.DrawWireSphere(transform.position, 0.5f * maxScale);
         }
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(user.position, user.position + user.forward * 3);
-        Transform camera = user.GetComponent<Player.PlayerMovement>().cameraController.transform;
-        Gizmos.DrawLine(camera.position, camera.position + camera.forward * 3);
 
         if (isInflated) {
             Gizmos.color = Color.magenta;
@@ -58,7 +54,6 @@ public class BasicProjectile : MonoBehaviour {
     }
 
     private void InflateCheck() {
-        Debug.Log(transform.localScale.x);
         float scale = transform.localScale.x + ((maxScale / inflateTime) * Time.deltaTime);
         scale = Mathf.Clamp(scale, 0, maxScale);
         transform.localScale = new Vector3(scale, scale, scale);
@@ -84,7 +79,7 @@ public class BasicProjectile : MonoBehaviour {
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
     }
 
-    private void Decay() {
+    public void Decay() {
         Destroy(gameObject);
     }
 }

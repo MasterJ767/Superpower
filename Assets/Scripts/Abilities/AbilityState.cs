@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Abilities {
 public struct AbilityState {
-    public bool canUse;
     public float cooldownTimer;
 }
 }

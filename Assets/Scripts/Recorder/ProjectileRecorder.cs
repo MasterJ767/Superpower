@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Recorder {
-public class ProjectileRecorder : MonoBehaviour {
+public class ProjectileRecorder : MonoBehaviour, IRecorder {
     private Managers.RecorderManager recorderManager;
+    private Abilities.BasicProjectile projectileController;
 
     private List<ProjectileState> history;
 
     private void Awake() {
         recorderManager = Managers.RecorderManager.GetInstance();
+        projectileController = gameObject.GetComponent<Abilities.BasicProjectile>();
+        history = new List<ProjectileState>();
     }
 
     private void Start() {
@@ -18,7 +21,11 @@ public class ProjectileRecorder : MonoBehaviour {
 
     public IEnumerator Record() {
         ProjectileState state = new ProjectileState() {
-            // add state info here
+            position = transform.position,
+            rotation = transform.rotation,
+            scale = transform.localScale,
+            isInitialised = projectileController.isInitialised,
+            isInflated = projectileController.isInflated
         };
         history.Add(state);
 
@@ -31,18 +38,29 @@ public class ProjectileRecorder : MonoBehaviour {
 
     public IEnumerator Rewind(bool self, float time) 
     {
-        // Disable everything
+        ToggleRewind(true);
 
         int states = Mathf.FloorToInt((1.0f / recorderManager.recordFrequency) * time);
         int historyStates = history.Count;
-        List<ProjectileState> historyCopy = states >= historyStates ? new List<ProjectileState>(history) : new List<ProjectileState>(history.GetRange(historyStates - states, states));
+        Stack<ProjectileState> historyStack = states >= historyStates ? new Stack<ProjectileState>(history) : new Stack<ProjectileState>(history.GetRange(historyStates - states, states));
 
-        while (historyCopy.Count > 0) {
-            // transfer state info
+        while (historyStack.Count > 0) {
+            ProjectileState state = historyStack.Pop();
+            transform.position = state.position;
+            transform.rotation = state.rotation;
+            transform.localScale = state.scale;
+            projectileController.isInitialised = state.isInitialised;
+            projectileController.isInflated = state.isInflated;
             yield return new WaitForSeconds(recorderManager.recordFrequency);
         }
 
-        // Enable everything
+        if (!projectileController.isInitialised || historyStates < states) { projectileController.Decay(); }
+
+        ToggleRewind(false);
+    }
+
+    public void ToggleRewind(bool value) {
+        projectileController.isRewinding = value;
     }
 }
 }

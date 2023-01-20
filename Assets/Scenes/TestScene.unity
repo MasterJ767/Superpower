@@ -3987,6 +3987,7 @@ GameObject:
   - component: {fileID: 838581704}
   - component: {fileID: 838581710}
   - component: {fileID: 838581711}
+  - component: {fileID: 838581712}
   - component: {fileID: 838581707}
   - component: {fileID: 838581709}
   - component: {fileID: 838581708}
@@ -4041,6 +4042,14 @@ MonoBehaviour:
   costToRunPerSecond: 30
   costToJump: 80
   targetRotation: {x: 0, y: 0, z: 0, w: 0}
+  isGrounded: 0
+  isFalling: 0
+  isRewinding: 0
+  speedHorizontal: 4.5
+  speedVertical: 0
+  externalForces: {x: 0, y: 0, z: 0}
+  fallDistance: 0
+  fallInitialY: -3.4028235e+38
 --- !u!95 &838581705
 Animator:
   serializedVersion: 5
@@ -4128,6 +4137,9 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
+  isDead: 0
+  timeSinceHit: 0
+  isRewinding: 0
 --- !u!114 &838581708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4177,6 +4189,8 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
+  timeSinceUse: 0
+  isRewinding: 0
 --- !u!114 &838581709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4226,6 +4240,8 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
+  timeSinceUse: 0
+  isRewinding: 0
 --- !u!114 &838581710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4266,6 +4282,20 @@ MonoBehaviour:
   ability4Border: {fileID: 464126129}
   ability5Border: {fileID: 1892108657}
   basicAttackOffset: {x: 0, y: 1, z: 1.2}
+  mode: 0
+  isRewinding: 0
+--- !u!114 &838581712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838581701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ead3b0bfc98d374478fc953f6f54f66e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &841281437
 GameObject:
   m_ObjectHideFlags: 0
@@ -4783,6 +4813,7 @@ MonoBehaviour:
   invertZoom: 0
   rotationX: 0
   rotationY: 0
+  isRewinding: 0
 --- !u!1001 &964780906
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6838,6 +6869,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1317965209}
+  - component: {fileID: 1317965210}
   m_Layer: 0
   m_Name: RecorderManager
   m_TagString: Untagged
@@ -6860,6 +6892,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1317965210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317965208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48aa4a5f465658a4495dfa78282aa9e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recordFrequency: 0.02
+  recordDuration: 6
 --- !u!1 &1324145652
 GameObject:
   m_ObjectHideFlags: 0
