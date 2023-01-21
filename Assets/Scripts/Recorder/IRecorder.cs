@@ -7,5 +7,7 @@ public interface IRecorder {
     public IEnumerator Record();
     public IEnumerator Rewind(bool self, float time);
     public void ToggleRewind(bool value);
+    public void StartRewind(float time);
+    public void StartSetback(float time);
 }
 }

@@ -8,6 +8,7 @@ public class ProjectileRecorder : MonoBehaviour, IRecorder {
     private Abilities.BasicProjectile projectileController;
 
     private List<ProjectileState> history;
+    private bool isRecording = true;
 
     private void Awake() {
         recorderManager = Managers.RecorderManager.GetInstance();
@@ -20,20 +21,22 @@ public class ProjectileRecorder : MonoBehaviour, IRecorder {
     }
 
     public IEnumerator Record() {
-        ProjectileState state = new ProjectileState() {
-            position = transform.position,
-            rotation = transform.rotation,
-            scale = transform.localScale,
-            isInitialised = projectileController.isInitialised,
-            isInflated = projectileController.isInflated
-        };
-        history.Add(state);
+        while (isRecording) {
+            ProjectileState state = new ProjectileState() {
+                position = transform.position,
+                rotation = transform.rotation,
+                scale = transform.localScale,
+                isInitialised = projectileController.isInitialised,
+                isInflated = projectileController.isInflated
+            };
+            history.Add(state);
 
-        while(history.Count > ((1.0f / recorderManager.recordFrequency) * recorderManager.recordDuration)) {
-            history.RemoveAt(0);
+            while(history.Count > ((1.0f / recorderManager.recordFrequency) * recorderManager.recordDuration)) {
+                history.RemoveAt(0);
+            }
+
+            yield return new WaitForSeconds(recorderManager.recordFrequency);
         }
-
-        yield return new WaitForSeconds(recorderManager.recordFrequency);
     }
 
     public IEnumerator Rewind(bool self, float time) 
@@ -61,6 +64,14 @@ public class ProjectileRecorder : MonoBehaviour, IRecorder {
 
     public void ToggleRewind(bool value) {
         projectileController.isRewinding = value;
+    }
+
+    public void StartRewind(float time) {
+        StartCoroutine(Rewind(true, time));
+    }
+
+    public void StartSetback(float time) {
+        StartCoroutine(Rewind(false, time));
     }
 }
 }

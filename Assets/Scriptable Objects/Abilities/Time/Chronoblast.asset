@@ -14,10 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityName: Chronoblast
   abilityType: 0
+  abilityEffect: 0
+  animationName: BasicAttack
+  animationDelayTime: 1.4
   energyCost: 10
   staminaCost: 0
   damage: 8
   range: 12
   cooldown: 2.4
   speed: 9.5
+  duration: 0
   prefab: {fileID: 6397738746419445079, guid: 897943256cafb854c8c8fdd1050a2f54, type: 3}
+  prefabOffset: {x: 0, y: 1, z: 1.2}

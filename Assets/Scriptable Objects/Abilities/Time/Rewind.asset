@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7e445c4bcaf3eb4b8f46010fff19327, type: 3}
+  m_Name: Rewind
+  m_EditorClassIdentifier: 
+  abilityName: Rewind
+  abilityType: 18
+  abilityEffect: 22
+  animationName: 
+  animationDelayTime: 0
+  energyCost: 775
+  staminaCost: 0
+  damage: 0
+  range: 0
+  cooldown: 22.5
+  speed: 0
+  duration: 2
+  prefab: {fileID: 0}
+  prefabOffset: {x: 0, y: 0, z: 0}

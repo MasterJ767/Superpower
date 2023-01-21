@@ -4,9 +4,12 @@ using UnityEngine;
 
 namespace Statistics {
 public class Information : MonoBehaviour {
+    [Header("General")]
     public string entityName;
     public KineticType entityClass;
     public int level;
+    
+    [Header("Attacks")]
     public Abilities.Ability baseAttack;
     public Abilities.Ability attack1;
     public Abilities.Ability attack2;

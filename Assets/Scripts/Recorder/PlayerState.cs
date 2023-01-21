@@ -26,7 +26,6 @@ public struct PlayerState {
     public float timeSinceHit;
     public float currentStamina;
     public float timeSinceStaminaUse;
-    public float currentEnergy;
     public float timeSinceEnergyUse;
 }
 }

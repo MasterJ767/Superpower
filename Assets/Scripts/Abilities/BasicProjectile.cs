@@ -5,7 +5,6 @@ using UnityEngine;
 namespace Abilities {
 public class BasicProjectile : MonoBehaviour {
     public float maxScale;
-    public float inflateTime;
     public GameObject[] particleSystems;
 
     private Transform user;
@@ -13,6 +12,7 @@ public class BasicProjectile : MonoBehaviour {
     private float damage;
     private float speed;
     private float range;
+    private float inflateTime;
     private Vector3 startPosition;
     private Vector3 targetPosition;
     [HideInInspector] public bool isInitialised;
@@ -40,12 +40,13 @@ public class BasicProjectile : MonoBehaviour {
         }
     }
 
-    public void Initialise(Transform user, Vector3 offset, float damage, float speed, float range) {
+    public void Initialise(Transform user, Vector3 offset, float damage, float speed, float range, float animationDelayTime) {
         this.user = user;
         this.offset = offset;
         this.damage = damage;
         this.speed = speed;
         this.range = range;
+        this.inflateTime = animationDelayTime;
         isInitialised = true;       
     }
 

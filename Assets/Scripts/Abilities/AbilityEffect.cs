@@ -26,6 +26,8 @@ public enum AbilityEffect {
     Phoenix,
     Shield,
     Discharge,
+    Rewind,
+    Setback,
     Flatten,
     Sneak
 }

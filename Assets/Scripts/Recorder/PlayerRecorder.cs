@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Recorder {
 public class PlayerRecorder : MonoBehaviour, IRecorder {
+    [Header("UI")]
+    public GameObject timeVignette;
+
     private Managers.RecorderManager recorderManager;
     private Player.PlayerMovement playerMovement;
     private Player.PlayerAbilities playerAbilities;
@@ -13,6 +16,7 @@ public class PlayerRecorder : MonoBehaviour, IRecorder {
     private Statistics.Energy playerEnergy;
 
     private List<PlayerState> history;
+    private bool isRecording = true;
 
     private void Awake() {
         recorderManager = Managers.RecorderManager.GetInstance();
@@ -30,39 +34,40 @@ public class PlayerRecorder : MonoBehaviour, IRecorder {
     }
 
     public IEnumerator Record() {
-        PlayerState state = new PlayerState() {
-            position = transform.position,
-            rotation = transform.rotation,
-            cameraPosition = cameraController.transform.position,
-            cameraRotation = cameraController.transform.rotation,
-            isGrounded = playerMovement.isGrounded,
-            isFalling = playerMovement.isFalling,
-            speedHorizontal = playerMovement.speedHorizontal,
-            speedVertical = playerMovement.speedVertical,
-            externalForces = playerMovement.externalForces,
-            fallDistance = playerMovement.fallDistance,
-            fallInitialY = playerMovement.fallInitialY,
-            attackMode = playerAbilities.mode,
-            basicAttackCooldown = playerAbilities.basicAttack.cooldownTimer,
-            attack1Cooldown = playerAbilities.attack1.cooldownTimer,
-            attack2Cooldown = playerAbilities.attack2.cooldownTimer,
-            attack3Cooldown = playerAbilities.attack3.cooldownTimer,
-            attack4Cooldown = playerAbilities.attack4.cooldownTimer,
-            attack5Cooldown = playerAbilities.attack5.cooldownTimer,
-            currentHealth = playerHealth.currentHealth,
-            timeSinceHit = playerHealth.timeSinceHit,
-            currentStamina = playerStamina.currentStamina,
-            timeSinceStaminaUse = playerStamina.timeSinceUse,
-            currentEnergy = playerEnergy.currentEnergy,
-            timeSinceEnergyUse = playerEnergy.timeSinceUse
-        };
-        history.Add(state);
+        while (isRecording) {
+            PlayerState state = new PlayerState() {
+                position = transform.position,
+                rotation = transform.rotation,
+                cameraPosition = cameraController.transform.position,
+                cameraRotation = cameraController.transform.rotation,
+                isGrounded = playerMovement.isGrounded,
+                isFalling = playerMovement.isFalling,
+                speedHorizontal = playerMovement.speedHorizontal,
+                speedVertical = playerMovement.speedVertical,
+                externalForces = playerMovement.externalForces,
+                fallDistance = playerMovement.fallDistance,
+                fallInitialY = playerMovement.fallInitialY,
+                attackMode = playerAbilities.mode,
+                basicAttackCooldown = playerAbilities.basicAttack.cooldownTimer,
+                attack1Cooldown = playerAbilities.attack1.cooldownTimer,
+                attack2Cooldown = playerAbilities.attack2.cooldownTimer,
+                attack3Cooldown = playerAbilities.attack3.cooldownTimer,
+                attack4Cooldown = playerAbilities.attack4.cooldownTimer,
+                attack5Cooldown = playerAbilities.attack5.cooldownTimer,
+                currentHealth = playerHealth.currentHealth,
+                timeSinceHit = playerHealth.timeSinceHit,
+                currentStamina = playerStamina.currentStamina,
+                timeSinceStaminaUse = playerStamina.timeSinceUse,
+                timeSinceEnergyUse = playerEnergy.timeSinceUse
+            };
+            history.Add(state);
 
-        while(history.Count > ((1.0f / recorderManager.recordFrequency) * recorderManager.recordDuration)) {
-            history.RemoveAt(0);
+            while(history.Count > ((1.0f / recorderManager.recordFrequency) * recorderManager.recordDuration)) {
+                history.RemoveAt(0);
+            }
+
+            yield return new WaitForSeconds(recorderManager.recordFrequency);
         }
-
-        yield return new WaitForSeconds(recorderManager.recordFrequency);
     }
 
     public IEnumerator Rewind(bool self, float time) 
@@ -100,9 +105,7 @@ public class PlayerRecorder : MonoBehaviour, IRecorder {
             playerStamina.currentStamina = self ? Mathf.Max(state.currentStamina, playerStamina.currentStamina) : Mathf.Min(state.currentStamina, playerStamina.currentStamina);
             playerStamina.timeSinceUse = state.timeSinceStaminaUse;
             playerStamina.SetStaminaSlider();
-            playerEnergy.currentEnergy = self ? Mathf.Max(state.currentEnergy, playerEnergy.currentEnergy) : Mathf.Min(state.currentEnergy, playerEnergy.currentEnergy);
             playerEnergy.timeSinceUse = state.timeSinceEnergyUse;
-            playerEnergy.SetEnergySlider();
             yield return new WaitForSeconds(recorderManager.recordFrequency);
         }
 
@@ -112,12 +115,21 @@ public class PlayerRecorder : MonoBehaviour, IRecorder {
     }
 
     public void ToggleRewind(bool value) {
+        timeVignette.SetActive(value);
         playerMovement.isRewinding = value;
         cameraController.isRewinding = value;
         playerAbilities.isRewinding = value;
         playerHealth.isRewinding = value;
         playerStamina.isRewinding = value;
         playerEnergy.isRewinding = value;
+    }
+
+    public void StartRewind(float time) {
+        StartCoroutine(Rewind(true, time));
+    }
+
+    public void StartSetback(float time) {
+        StartCoroutine(Rewind(false, time));
     }
 }
 }

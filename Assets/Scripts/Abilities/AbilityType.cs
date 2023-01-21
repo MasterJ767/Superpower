@@ -29,9 +29,6 @@ public enum AbilityType {
     SphereShield,
     Flash,
     Reveal,
-    Portal,
-    Setback,
-    Rewind,
-    Sneak
+    Portal
 }
 }

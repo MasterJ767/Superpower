@@ -7,12 +7,17 @@ namespace Abilities {
 public class Ability : ScriptableObject {
     public string abilityName;
     public AbilityType abilityType;
+    public AbilityEffect abilityEffect;
+    public string animationName;
+    public float animationDelayTime;
     public float energyCost;
     public float staminaCost;
     public float damage;
     public float range;
     public float cooldown;
     public float speed;
+    public float duration;
     public GameObject prefab;
+    public Vector3 prefabOffset;
 }
 }

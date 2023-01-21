@@ -12,9 +12,6 @@ public class PlayerAbilities : MonoBehaviour {
     public GameObject ability4Border;
     public GameObject ability5Border;
 
-    [Header("Positioning")]
-    public Vector3 basicAttackOffset;
-
     [HideInInspector] public AttackMode mode = AttackMode.Basic;
     private PlayerMovement playerMovement;
     private Statistics.Information playerInfo;
@@ -146,60 +143,59 @@ public class PlayerAbilities : MonoBehaviour {
         switch (mode) {
             case AttackMode.Basic:
                 ability = playerInfo.baseAttack;
-                if (Input.GetMouseButton(0) && basicAttack.cooldownTimer < float.Epsilon && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
-                    basicAttack.cooldownTimer = ability.cooldown;
-                    energy.Expend(ability.energyCost);
-                    stamina.Expend(ability.staminaCost);
-                    playerMovement.PlayAttackAnimation("BasicAttack");
-                    Abilities.GenericAbilities.ExecuteBasicAttack(transform, basicAttackOffset, playerInfo.baseAttack, basicAttack);
+                if (Input.GetMouseButton(0) && basicAttack.cooldownTimer <= 0 && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    basicAttack.cooldownTimer = HandleAbility(ability, basicAttack);
                 }
                 break;
             case AttackMode.Attack1:
                 ability = playerInfo.attack1;
-                if (Input.GetMouseButton(0) && attack1.cooldownTimer < float.Epsilon && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
-                    attack1.cooldownTimer = ability.cooldown;
-                    energy.Expend(ability.energyCost);
-                    stamina.Expend(ability.staminaCost);
-                    //Handle attack
+                if (Input.GetMouseButton(0) && attack1.cooldownTimer <= 0 && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    attack1.cooldownTimer = HandleAbility(ability, attack1);
                 }
                 break;
             case AttackMode.Attack2:
                 ability = playerInfo.attack2;
-                if (Input.GetMouseButton(0) && attack2.cooldownTimer < float.Epsilon && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
-                    attack2.cooldownTimer = ability.cooldown;
-                    energy.Expend(ability.energyCost);
-                    stamina.Expend(ability.staminaCost);
-                    //Handle attack
+                if (Input.GetMouseButton(0) && attack2.cooldownTimer <= 0 && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    HandleAbility(ability, attack2);
                 }
                 break;
             case AttackMode.Attack3:
                 ability = playerInfo.attack3;
-                if (Input.GetMouseButton(0) && attack3.cooldownTimer < float.Epsilon && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
-                    attack3.cooldownTimer = ability.cooldown;
-                    energy.Expend(ability.energyCost);
-                    stamina.Expend(ability.staminaCost);
-                    //Handle attack
+                if (Input.GetMouseButton(0) && attack3.cooldownTimer <= 0 && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    HandleAbility(ability, attack3);
                 }
                 break;
             case AttackMode.Attack4:
                 ability = playerInfo.attack4;
-                if (Input.GetMouseButton(0) && attack4.cooldownTimer < float.Epsilon && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
-                    attack4.cooldownTimer = ability.cooldown;
-                    energy.Expend(ability.energyCost);
-                    stamina.Expend(ability.staminaCost);
-                    //Handle attack
+                if (Input.GetMouseButton(0) && attack4.cooldownTimer <= 0 && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    HandleAbility(ability, attack4);
                 }
                 break;
             case AttackMode.Attack5:
                 ability = playerInfo.attack5;
-                if (Input.GetMouseButton(0) && attack5.cooldownTimer < float.Epsilon && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
-                    attack5.cooldownTimer = ability.cooldown;
-                    energy.Expend(ability.energyCost);
-                    stamina.Expend(ability.staminaCost);
-                    //Handle attack
+                if (Input.GetMouseButton(0) && attack5.cooldownTimer <= 0 && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
+                    HandleAbility(ability, attack5);
                 }
                 break;
         }
+    }
+
+    private float HandleAbility(Abilities.Ability ability, Abilities.AbilityState abilityProperties) {
+        abilityProperties.cooldownTimer = ability.cooldown;
+        energy.Expend(ability.energyCost);
+        stamina.Expend(ability.staminaCost);
+        if (!string.IsNullOrEmpty(ability.animationName)) { playerMovement.PlayAttackAnimation(ability.animationName); }
+
+        switch (ability.abilityType) {
+            case Abilities.AbilityType.Basic:
+                Abilities.GenericAbilities.ExecuteBasicAttack(transform, ability, abilityProperties);
+                break;
+            case Abilities.AbilityType.Self:
+                Abilities.GenericAbilities.ExecuteSelf(transform, ability, abilityProperties);
+                break;
+        }
+
+        return abilityProperties.cooldownTimer;
     }
 }
 }

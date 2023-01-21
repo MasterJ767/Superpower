@@ -17,3 +17,4 @@ MonoBehaviour:
   secondary: {r: 0.9137255, g: 0.92156863, b: 0.7647059, a: 1}
   abilities:
   - {fileID: 11400000, guid: 564aaa8b8c04f1445b76f4b9c16990e5, type: 2}
+  - {fileID: 11400000, guid: fd825169f03711b458cd5e396aaa3231, type: 2}
