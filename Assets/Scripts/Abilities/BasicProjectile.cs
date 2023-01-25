@@ -13,20 +13,12 @@ public class BasicProjectile : MonoBehaviour {
     private float speed;
     private float range;
     private float inflateTime;
+    private byte team;
     private Vector3 startPosition;
     private Vector3 targetPosition;
     [HideInInspector] public bool isInitialised;
     [HideInInspector] public bool isInflated;
     [HideInInspector] public bool isRewinding;
-
-    private void Update() {
-        if (!isRewinding && isInitialised && !isInflated) { 
-            PositionCheck();
-            InflateCheck(); 
-        }
-        if (!isRewinding && isInflated) { MoveProjectile(); }
-        if (isInflated && Vector3.Distance(transform.position, targetPosition) <= float.Epsilon) { Decay(); }
-    }
 
     private void OnDrawGizmos() {
         if (isInitialised && !isInflated) {
@@ -40,13 +32,38 @@ public class BasicProjectile : MonoBehaviour {
         }
     }
 
-    public void Initialise(Transform user, Vector3 offset, float damage, float speed, float range, float animationDelayTime) {
+    private void Update() {
+        if (!isRewinding && isInitialised && !isInflated) { 
+            PositionCheck();
+            InflateCheck(); 
+        }
+        if (!isRewinding && isInflated) { MoveProjectile(); }
+        if (isInflated && Vector3.Distance(transform.position, targetPosition) <= float.Epsilon) { Decay(); }
+    }
+
+    private void OnCollisionEnter(Collision collision) {
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Wall")) {
+
+        }
+        else if (collision.gameObject.CompareTag("Enemy") && team != 2) {
+
+        }
+        else if (collision.gameObject.CompareTag("Player") && team != 1) {
+
+        }
+        else if (collision.gameObject.CompareTag("Ally") && team != 1) {
+
+        }
+    }
+
+    public void Initialise(Transform user, Vector3 offset, float damage, float speed, float range, float animationDelayTime, byte team) {
         this.user = user;
         this.offset = offset;
         this.damage = damage;
         this.speed = speed;
         this.range = range;
         this.inflateTime = animationDelayTime;
+        this.team = team;
         isInitialised = true;       
     }
 

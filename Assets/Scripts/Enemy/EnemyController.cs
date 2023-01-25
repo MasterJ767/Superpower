@@ -8,7 +8,7 @@ public class EnemyController : MonoBehaviour
     private DataStructures.BehaviourSelector behaviourTree;
 
     private void Start() {
-        // Add to behaviour tree here
+        behaviourTree = new DataStructures.BehaviourSelector("parent");
     }
 
     private void Update() {

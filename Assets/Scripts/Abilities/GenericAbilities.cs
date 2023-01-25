@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Abilities {
 public static class GenericAbilities {
-   public static void ExecuteBasicAttack(Transform user, Ability baseAttack, AbilityState attackModifiers) {
+   public static void ExecuteBasicAttack(Transform user, Ability baseAttack, AbilityState attackModifiers, byte team) {
       GameObject projectile = GameObject.Instantiate(baseAttack.prefab, user.position + baseAttack.prefabOffset, user.rotation);
-      projectile.GetComponent<BasicProjectile>().Initialise(user, baseAttack.prefabOffset, baseAttack.damage, baseAttack.speed, baseAttack.range, baseAttack.animationDelayTime);
+      projectile.GetComponent<BasicProjectile>().Initialise(user, baseAttack.prefabOffset, baseAttack.damage, baseAttack.speed, baseAttack.range, baseAttack.animationDelayTime, team);
    }
 
    public static void ExecuteMeleeAttack() {

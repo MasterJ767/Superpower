@@ -17,6 +17,7 @@ public class PlayerAbilities : MonoBehaviour {
     private Statistics.Information playerInfo;
     private Statistics.Stamina stamina;
     private Statistics.Energy energy;
+    private readonly byte team = 1;
     [HideInInspector] public Abilities.AbilityState basicAttack;
     [HideInInspector] public Abilities.AbilityState attack1;
     [HideInInspector] public Abilities.AbilityState attack2;
@@ -188,7 +189,7 @@ public class PlayerAbilities : MonoBehaviour {
 
         switch (ability.abilityType) {
             case Abilities.AbilityType.Basic:
-                Abilities.GenericAbilities.ExecuteBasicAttack(transform, ability, abilityProperties);
+                Abilities.GenericAbilities.ExecuteBasicAttack(transform, ability, abilityProperties, team);
                 break;
             case Abilities.AbilityType.Self:
                 Abilities.GenericAbilities.ExecuteSelf(transform, ability, abilityProperties);

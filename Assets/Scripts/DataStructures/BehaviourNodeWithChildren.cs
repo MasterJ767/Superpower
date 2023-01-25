@@ -6,7 +6,9 @@ namespace DataStructures {
 public class BehaviourNodeWithChildren : BehaviourNode {
     protected List<BehaviourNode> childNodes;
 
-    public BehaviourNodeWithChildren(string nodeName) : base(nodeName) {}
+    public BehaviourNodeWithChildren(string nodeName) : base(nodeName) {
+        childNodes = new List<BehaviourNode>();
+    }
 
     public void AddChild(BehaviourNode node) {
         childNodes.Add(node);
