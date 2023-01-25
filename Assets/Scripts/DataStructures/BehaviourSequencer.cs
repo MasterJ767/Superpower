@@ -6,9 +6,9 @@ namespace DataStructures {
 public class BehaviourSequencer : BehaviourNodeWithChildren {
     public BehaviourSequencer(string nodeName) : base(nodeName) {}
 
-    public override BehaviourState Execute(float dt) {
+    public override BehaviourState Execute(float dt, GameObject self) {
         foreach (BehaviourNode node in childNodes) {
-            BehaviourState nodeState = node.Execute(dt);
+            BehaviourState nodeState = node.Execute(dt, self);
             switch(nodeState){
                 case BehaviourState.Success:
                     continue;

@@ -6,14 +6,14 @@ using UnityEngine;
 namespace DataStructures {
 public class BehaviourAction : BehaviourNode
 {
-    private Func<float, BehaviourState, BehaviourState> function;
+    private Func<float, GameObject, BehaviourState, BehaviourState> function;
 
-    public BehaviourAction(string nodeName, Func<float, BehaviourState, BehaviourState> function) : base(nodeName) {
+    public BehaviourAction(string nodeName, Func<float, GameObject, BehaviourState, BehaviourState> function) : base(nodeName) {
         this.function = function;
     }
 
-    public override BehaviourState Execute(float dt) {
-        currentState = function(dt, currentState);
+    public override BehaviourState Execute(float dt, GameObject self) {
+        currentState = function(dt, self, currentState);
         return currentState;
     }
 }

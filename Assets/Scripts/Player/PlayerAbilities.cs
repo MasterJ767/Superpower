@@ -189,10 +189,10 @@ public class PlayerAbilities : MonoBehaviour {
 
         switch (ability.abilityType) {
             case Abilities.AbilityType.Basic:
-                Abilities.GenericAbilities.ExecuteBasicAttack(transform, ability, abilityProperties, team);
+                Abilities.AbilityCaster.ExecuteBasicAttack(transform, ability, abilityProperties, team);
                 break;
             case Abilities.AbilityType.Self:
-                Abilities.GenericAbilities.ExecuteSelf(transform, ability, abilityProperties);
+                Abilities.AbilityCaster.ExecuteSelf(transform, ability, abilityProperties);
                 break;
         }
 

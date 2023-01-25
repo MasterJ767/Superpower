@@ -20,12 +20,12 @@ public class PlayerRecorder : MonoBehaviour, IRecorder {
 
     private void Awake() {
         recorderManager = Managers.RecorderManager.GetInstance();
-        playerMovement = gameObject.GetComponent<Player.PlayerMovement>();
-        playerAbilities = gameObject.GetComponent<Player.PlayerAbilities>();
+        playerMovement = GetComponent<Player.PlayerMovement>();
+        playerAbilities = GetComponent<Player.PlayerAbilities>();
         cameraController = playerMovement.cameraController;
-        playerHealth = gameObject.GetComponent<Statistics.Health>();
-        playerStamina = gameObject.GetComponent<Statistics.Stamina>();
-        playerEnergy = gameObject.GetComponent<Statistics.Energy>();
+        playerHealth = GetComponent<Statistics.Health>();
+        playerStamina = GetComponent<Statistics.Stamina>();
+        playerEnergy = GetComponent<Statistics.Energy>();
         history = new List<PlayerState>();
     }
 

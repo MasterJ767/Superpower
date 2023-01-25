@@ -12,7 +12,7 @@ public class ProjectileRecorder : MonoBehaviour, IRecorder {
 
     private void Awake() {
         recorderManager = Managers.RecorderManager.GetInstance();
-        projectileController = gameObject.GetComponent<Abilities.BasicProjectile>();
+        projectileController = GetComponent<Abilities.BasicProjectile>();
         history = new List<ProjectileState>();
     }
 

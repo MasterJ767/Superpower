@@ -12,7 +12,7 @@ public class BehaviourNode {
         currentState = BehaviourState.Initialise;
     }
 
-    public virtual BehaviourState Execute(float dt) {
+    public virtual BehaviourState Execute(float dt, GameObject self) {
         return BehaviourState.Success;
     }
 
