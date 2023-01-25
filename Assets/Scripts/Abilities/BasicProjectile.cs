@@ -43,16 +43,14 @@ public class BasicProjectile : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Wall")) {
-
+            Decay();
         }
-        else if (collision.gameObject.CompareTag("Enemy") && team != 2) {
-
-        }
-        else if (collision.gameObject.CompareTag("Player") && team != 1) {
-
-        }
-        else if (collision.gameObject.CompareTag("Ally") && team != 1) {
-
+        else if ((collision.gameObject.CompareTag("Enemy") && team != 2) ||
+                (collision.gameObject.CompareTag("Player") && team != 1) ||
+                (collision.gameObject.CompareTag("Ally") && team != 1)) {
+            Statistics.Health health = collision.gameObject.GetComponent<Statistics.Health>();
+            health.Damage(damage);
+            Decay();
         }
     }
 
