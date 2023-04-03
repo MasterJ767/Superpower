@@ -8,7 +8,7 @@ As things stand there is a player in the game who has access to a couple of abil
 How to Use
 -----------
 
-Open the game in Unity. Use the WASD keys to move the player and mouse to rotate and zoom with the camera. Pressing buttons 1 - 5 allows you to switch between your five abilites. The player also has a basic attack which is the default attack selected and can be reselect with Q or by pressing buttons 1 - 5 when attack 1 - 5 are already selected.  
+Open the game in Unity. Use the WASD keys to move the player and mouse to rotate and zoom with the camera. Pressing buttons 1 - 5 allows you to switch between your five abilites. The player also has a basic attack which is the default attack selected and can be reselected with Q or by pressing buttons 1 - 5 when attack 1 - 5 are already selected.  
 
 Built With
 -----------

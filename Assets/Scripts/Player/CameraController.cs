@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ namespace Player {
 public class CameraController : MonoBehaviour {
     [Header("Settings")]
     public Transform followTarget;
+    public float movementSpeed = 6f;
     public float rotationSpeed = 2.0f;
     public float minfollowDistance = 2.0f;
     public float maxfollowDistance = 5.0f;
@@ -15,11 +17,14 @@ public class CameraController : MonoBehaviour {
     public bool invertX;
     public bool invertY;
     public bool invertZoom;
+    public LayerMask environmentLayer;
+    public LayerMask playerLayer;
 
     [HideInInspector] public float rotationX;
     [HideInInspector] public float rotationY;
     private float zoom = 0f;
     [HideInInspector] public bool isRewinding;
+    private Vector3 currentVelocity;
 
     private void Start() {
         Cursor.visible = false;
@@ -33,6 +38,8 @@ public class CameraController : MonoBehaviour {
             rotationX += Input.GetAxis("Mouse Y") * rotationSpeed * invertXVal;
             rotationX = Mathf.Clamp(rotationX, minVerticalAngle, maxVerticalAngle);
             rotationY += Input.GetAxis("Mouse X") * rotationSpeed * invertYVal;
+            if (rotationY < 0.0f) { rotationY += 360.0f; }
+            if (rotationY > 360.0f) { rotationY -= 360.0f; }
 
             float invertZoomVal = invertZoom ? -1 : 1;
             float zoomDelta = Input.GetAxis("Mouse ScrollWheel") * invertZoomVal;
@@ -41,9 +48,31 @@ public class CameraController : MonoBehaviour {
             float zoomHeight = Mathf.Lerp(0, 0.1f, zoom);
 
             Quaternion targetRotation = Quaternion.Euler(rotationX, rotationY, 0);
+            transform.rotation = targetRotation;
+
             Vector3 focusPosition = followTarget.position + new Vector3(framingOffset.x, framingOffset.y, 0);
-            transform.position = focusPosition - (targetRotation * new Vector3(0, zoomHeight, followDistance));
-            transform.rotation = targetRotation;   
+            Vector3 idealPosition = focusPosition - (targetRotation * new Vector3(0, zoomHeight, followDistance));
+
+            Vector3 displacement = focusPosition - idealPosition;
+            float distance = displacement.magnitude;
+            Vector3 direction = displacement.normalized;
+
+            RaycastHit hit;
+            if (Physics.Raycast(focusPosition, -direction, out hit, distance, environmentLayer)) { 
+                Vector3 compromisePosition = focusPosition - (direction * hit.distance);
+                RaycastHit hit2;
+                if (Physics.Raycast(idealPosition, direction, out hit2, distance, environmentLayer | playerLayer)) { 
+                    if (distance - hit.distance - hit2.distance < 0) {
+                        float interpolatedDistance = ((distance - hit2.distance) + hit.distance) * 0.5f;
+                        idealPosition = focusPosition - (direction * interpolatedDistance);
+                    }
+                    else {
+                        idealPosition = compromisePosition;
+                    }
+                }
+            }
+            
+            transform.position = idealPosition;
         }
     }
 }

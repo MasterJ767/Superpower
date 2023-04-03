@@ -80,7 +80,7 @@ public class BasicProjectile : MonoBehaviour {
             isInflated = true; 
             if (user.CompareTag("Player")) {
                 Transform camera = user.GetComponent<Player.PlayerMovement>().cameraController.transform;
-                Vector3 lookDirection = new Vector3(user.forward.x, Mathf.Lerp(user.forward.y, camera.forward.y, 1.0f / 3.0f), user.forward.z);
+                Vector3 lookDirection = new Vector3(user.forward.x, camera.forward.y, user.forward.z);
                 transform.rotation = Quaternion.LookRotation(lookDirection);
             }
             else {
