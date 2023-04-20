@@ -12,6 +12,7 @@ public class EnemyController : MonoBehaviour
     public float stoppingRadius = 6.0f;
     public Transform target;
     [HideInInspector] public CharacterController characterController;
+    [HideInInspector] public bool isRewinding;
 
     private DataStructures.BehaviourSelector behaviourTree;
 

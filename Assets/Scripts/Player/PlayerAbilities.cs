@@ -11,6 +11,7 @@ public class PlayerAbilities : MonoBehaviour {
     public GameObject ability3Border;
     public GameObject ability4Border;
     public GameObject ability5Border;
+    public LayerMask enemyLayer;
 
     [HideInInspector] public AttackMode mode = AttackMode.Basic;
     private PlayerMovement playerMovement;
@@ -25,6 +26,7 @@ public class PlayerAbilities : MonoBehaviour {
     [HideInInspector] public Abilities.AbilityState attack4;
     [HideInInspector] public Abilities.AbilityState attack5;
     [HideInInspector] public bool isRewinding;
+    private Transform target = null;
 
     private void Awake() {
         playerMovement = GetComponent<PlayerMovement>();
@@ -32,19 +34,20 @@ public class PlayerAbilities : MonoBehaviour {
         stamina = GetComponent<Statistics.Stamina>();
         energy = GetComponent<Statistics.Energy>();
 
-        basicAttack = new Abilities.AbilityState { cooldownTimer = 0};
-        attack1 = new Abilities.AbilityState { cooldownTimer = 0};
-        attack2 = new Abilities.AbilityState { cooldownTimer = 0};
-        attack3 = new Abilities.AbilityState { cooldownTimer = 0};
-        attack4 = new Abilities.AbilityState { cooldownTimer = 0};
-        attack5 = new Abilities.AbilityState { cooldownTimer = 0};
+        basicAttack = new Abilities.AbilityState { cooldownTimer = 0 };
+        attack1 = new Abilities.AbilityState { cooldownTimer = 0 };
+        attack2 = new Abilities.AbilityState { cooldownTimer = 0 };
+        attack3 = new Abilities.AbilityState { cooldownTimer = 0 };
+        attack4 = new Abilities.AbilityState { cooldownTimer = 0 };
+        attack5 = new Abilities.AbilityState { cooldownTimer = 0 };
     }
 
     private void Update() {
         if (!isRewinding) {
             UpdateCooldowns();
-            ModeCheck();
-            AbilityCheck();
+            Abilities.Ability ability = ModeCheck();
+            TargetCheck(ability);
+            AbilityCheck(ability);
         }
     }
 
@@ -57,7 +60,7 @@ public class PlayerAbilities : MonoBehaviour {
         attack5.cooldownTimer = attack5.cooldownTimer > 0 ? attack5.cooldownTimer - Time.deltaTime : 0;
     }
 
-    private void ModeCheck() {
+    private Abilities.Ability ModeCheck() {
         AttackMode lastMode = mode;
         if (Input.GetButtonDown("Basic")) { mode = AttackMode.Basic; }
         else if (Input.GetButtonDown("Ability1")) { mode = mode == AttackMode.Attack1 ? AttackMode.Basic : AttackMode.Attack1; }
@@ -107,6 +110,23 @@ public class PlayerAbilities : MonoBehaviour {
                     break;
             }
         }
+
+        switch (mode) {
+            case AttackMode.Basic: 
+                return playerInfo.baseAttack;
+            case AttackMode.Attack1: 
+                return playerInfo.attack1;
+            case AttackMode.Attack2: 
+                return playerInfo.attack2;
+            case AttackMode.Attack3: 
+                return playerInfo.attack3;
+            case AttackMode.Attack4: 
+                return playerInfo.attack4;
+            case AttackMode.Attack5: 
+                return playerInfo.attack5;
+            default:
+                return playerInfo.baseAttack;
+        }
     }
 
     public void UpdateBorder() {
@@ -139,46 +159,60 @@ public class PlayerAbilities : MonoBehaviour {
         }
     }
 
-    private void AbilityCheck() {
-        Abilities.Ability ability;
+    private void TargetCheck(Abilities.Ability ability) {
+        if (ability.abilityType != Abilities.AbilityType.Target) { return; }
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + new Vector3(0, 1.35f, 0), transform.GetComponent<Player.PlayerMovement>().cameraController.transform.forward, out hit, ability.range, enemyLayer)) {
+            Enemy.EnemyController enemy = hit.collider.GetComponent<Enemy.EnemyController>();
+            if (!enemy.isRewinding) {
+                target = enemy.transform;
+            }
+            else {
+                target = null;
+            }
+        }
+        else {
+            target = null;
+        }
+    }
+
+    private void AbilityCheck(Abilities.Ability ability) {
+        if (ability.abilityType == Abilities.AbilityType.Target && target == null) { return; }
+
         switch (mode) {
             case AttackMode.Basic:
-                ability = playerInfo.baseAttack;
                 if (Input.GetMouseButton(0) && basicAttack.cooldownTimer <= 0 && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
                     basicAttack.cooldownTimer = HandleAbility(ability, basicAttack);
                 }
                 break;
             case AttackMode.Attack1:
-                ability = playerInfo.attack1;
                 if (Input.GetMouseButton(0) && attack1.cooldownTimer <= 0 && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
                     attack1.cooldownTimer = HandleAbility(ability, attack1);
                 }
                 break;
             case AttackMode.Attack2:
-                ability = playerInfo.attack2;
                 if (Input.GetMouseButton(0) && attack2.cooldownTimer <= 0 && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
-                    HandleAbility(ability, attack2);
+                    attack2.cooldownTimer = HandleAbility(ability, attack2);
                 }
                 break;
             case AttackMode.Attack3:
-                ability = playerInfo.attack3;
                 if (Input.GetMouseButton(0) && attack3.cooldownTimer <= 0 && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
-                    HandleAbility(ability, attack3);
+                    attack3.cooldownTimer = HandleAbility(ability, attack3);
                 }
                 break;
             case AttackMode.Attack4:
-                ability = playerInfo.attack4;
                 if (Input.GetMouseButton(0) && attack4.cooldownTimer <= 0 && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
-                    HandleAbility(ability, attack4);
+                    attack4.cooldownTimer = HandleAbility(ability, attack4);
                 }
                 break;
             case AttackMode.Attack5:
-                ability = playerInfo.attack5;
                 if (Input.GetMouseButton(0) && attack5.cooldownTimer <= 0 && energy.ExpendQuery(ability.energyCost) > 0 && stamina.ExpendQuery(ability.staminaCost) > 0) {
-                    HandleAbility(ability, attack5);
+                    attack5.cooldownTimer = HandleAbility(ability, attack5);
                 }
                 break;
         }
+
     }
 
     private float HandleAbility(Abilities.Ability ability, Abilities.AbilityState abilityProperties) {
@@ -194,6 +228,11 @@ public class PlayerAbilities : MonoBehaviour {
             case Abilities.AbilityType.Self:
                 Abilities.AbilityCaster.ExecuteSelf(transform, ability, abilityProperties);
                 break;
+            case Abilities.AbilityType.Target:
+                Abilities.AbilityCaster.ExecuteTarget(target, ability, abilityProperties);
+                target = null;
+                break;
+
         }
 
         return abilityProperties.cooldownTimer;

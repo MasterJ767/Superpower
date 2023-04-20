@@ -78,6 +78,9 @@ public class PlayerRecorder : MonoBehaviour, IRecorder {
         int historyStates = history.Count;
         Stack<PlayerState> historyStack = states >= historyStates ? new Stack<PlayerState>(history) : new Stack<PlayerState>(history.GetRange(historyStates - states, states));
 
+        Statistics.Information playerInfo = GetComponent<Statistics.Information>();
+        playerInfo.SetFresnelColour(true, Managers.KineticManager.GetInstance().GetClass(Statistics.KineticType.Time).secondary);
+
         while (historyStack.Count > 0) {
             PlayerState state = historyStack.Pop();
             transform.position = state.position;
@@ -110,6 +113,8 @@ public class PlayerRecorder : MonoBehaviour, IRecorder {
         }
 
         if (historyStates < states) { yield return new WaitForSeconds((states - historyStates) * recorderManager.recordFrequency); }
+
+        playerInfo.SetFresnel(false);
 
         ToggleRewind(false);
     }

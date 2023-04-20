@@ -2937,9 +2937,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23f275e4ed12363408dd3c0fe9ed20bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityName: 
+  entityName: Enemy
   entityClass: 0
-  level: 0
+  level: 1
+  meshRenderer: {fileID: 880850813}
   baseAttack: {fileID: 0}
   attack1: {fileID: 0}
   attack2: {fileID: 0}
@@ -2965,6 +2966,7 @@ MonoBehaviour:
   stoppingRadius: 6
   target: {fileID: 0}
   characterController: {fileID: 0}
+  isRewinding: 0
 --- !u!1 &583091720
 GameObject:
   m_ObjectHideFlags: 0
@@ -3041,6 +3043,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 583091720}
   m_CullTransparentMesh: 1
+--- !u!137 &591760424 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1172324090021531726, guid: c210e7067012faa4eafdcf463383309f, type: 3}
+  m_PrefabInstance: {fileID: 964780906}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &635976138
 GameObject:
   m_ObjectHideFlags: 0
@@ -4489,6 +4496,7 @@ MonoBehaviour:
   entityName: Player
   entityClass: 10
   level: 1
+  meshRenderer: {fileID: 591760424}
   baseAttack: {fileID: 11400000, guid: 564aaa8b8c04f1445b76f4b9c16990e5, type: 2}
   attack1: {fileID: 11400000, guid: fd825169f03711b458cd5e396aaa3231, type: 2}
   attack2: {fileID: 11400000, guid: abbcd5eaf560fa44da5551e7413f3423, type: 2}
@@ -4513,6 +4521,9 @@ MonoBehaviour:
   ability3Border: {fileID: 794286322}
   ability4Border: {fileID: 464126129}
   ability5Border: {fileID: 1892108657}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
   mode: 0
   isRewinding: 0
 --- !u!114 &838581712
@@ -4765,6 +4776,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 869264064}
   m_CullTransparentMesh: 1
+--- !u!137 &880850813 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5211508491986625813, guid: ae6c960c6a6bc2a4da7eebcfc46236a6, type: 3}
+  m_PrefabInstance: {fileID: 935752938}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &896142609
 GameObject:
   m_ObjectHideFlags: 0

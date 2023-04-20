@@ -25,5 +25,13 @@ public static class AbilityCaster {
             break;
       }
    }
+
+   public static void ExecuteTarget(Transform target, Ability baseAttack, AbilityState attackModifiers) {
+      switch (baseAttack.abilityEffect) {
+         case AbilityEffect.Setback:
+            target.GetComponent<Recorder.IRecorder>().StartSetback(baseAttack.duration);
+            break;
+      }
+   }
 }
 }
