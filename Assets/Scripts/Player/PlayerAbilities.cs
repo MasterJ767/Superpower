@@ -42,6 +42,16 @@ public class PlayerAbilities : MonoBehaviour {
         attack5 = new Abilities.AbilityState { cooldownTimer = 0 };
     }
 
+    private void OnDrawGizmos() {
+        if ((mode == AttackMode.Basic && playerInfo.attack1.abilityType == Abilities.AbilityType.Target) ||
+            (mode == AttackMode.Attack1 && playerInfo.attack2.abilityType == Abilities.AbilityType.Target) ||
+            (mode == AttackMode.Attack2 && playerInfo.attack3.abilityType == Abilities.AbilityType.Target) ||
+            (mode == AttackMode.Attack3 && playerInfo.attack4.abilityType == Abilities.AbilityType.Target) ||
+            (mode == AttackMode.Attack4 && playerInfo.attack5.abilityType == Abilities.AbilityType.Target)) {
+                //Gizmos.DrawLine(transform.position + new Vector3(0, 1.35f, 0));
+        }
+    }
+
     private void Update() {
         if (!isRewinding) {
             UpdateCooldowns();

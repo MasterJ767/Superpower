@@ -107,6 +107,7 @@ public class EnemyController : MonoBehaviour
 
     private void UpdateTree() {
         behaviourTree.Reset();
+        Debug.Log("=================================");
         DataStructures.BehaviourState state = DataStructures.BehaviourState.Ongoing;
         while (state == DataStructures.BehaviourState.Ongoing) {
             state = behaviourTree.Execute(Time.deltaTime, gameObject);

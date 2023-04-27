@@ -9,12 +9,12 @@ public class BehaviourAction : BehaviourNode
     private Func<float, GameObject, BehaviourState, BehaviourState> function;
 
     public BehaviourAction(string nodeName, Func<float, GameObject, BehaviourState, BehaviourState> function) : base(nodeName) {
-        Debug.Log(nodeName);
         this.function = function;
     }
 
     public override BehaviourState Execute(float dt, GameObject self) {
         currentState = function(dt, self, currentState);
+        Debug.Log(nodeName + " - " + currentState);
         return currentState;
     }
 }

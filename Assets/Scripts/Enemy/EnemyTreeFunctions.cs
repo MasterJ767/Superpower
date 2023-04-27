@@ -78,6 +78,8 @@ public static class EnemyTreeFunctions
     public static BehaviourState Idle(float dt, GameObject self, BehaviourState state) {
         if (state == BehaviourState.Initialise) { return BehaviourState.Ongoing; }
         // Add idle action here
+        EnemyController enemyController = self.GetComponent<EnemyController>();
+        enemyController.characterController.Move(self.transform.forward * Time.deltaTime);
         return BehaviourState.Success;
     }
 }
